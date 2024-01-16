@@ -27,6 +27,18 @@ class ConexionSequilze {
     desconectar = () => {
         process.on('SIGINT', () => conn.close())
     }
+    getUsuarioRegistrado = async(email) => {
+        
+        this.conectar();
+        let  user = await models.User.findOne(({ where: { email } }));
+ 
+        this.desconectar();
+        if (!user){
+            throw error;
+        }
+
+        return user;
+    }
 
     getlistado = async() => {
         let resultado = [];

@@ -13,7 +13,7 @@ class Server {
         this.app.use(express.json());
     }
     routes(){
-        this.app.use(this.commentsPath , require('../routes/routes'));
+        this.app.use(this.apiPath , require('../routes/routes'));
     }
 
     listen() {
