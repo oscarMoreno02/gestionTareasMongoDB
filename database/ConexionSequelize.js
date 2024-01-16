@@ -41,7 +41,7 @@ class ConexionSequilze {
         return user;
     }
 
-    getlistado = async() => {
+    getlistadoUsuarios = async() => {
         let resultado = [];
         this.conectar();
         console.log(`Accediendo a los datos...`)
@@ -68,7 +68,7 @@ class ConexionSequilze {
         this.conectar();
         try{
             const password = await bcrypt.hash(body.password, 10);
-            const usuarioNuevo = new models.User(body); //Con esto añade los timeStamps.
+            const usuarioNuevo = new models.User(body); 
             usuarioNuevo.password=password
             await usuarioNuevo.save();
             // const usuarioNuevo = await models.User.create(body);
@@ -123,6 +123,75 @@ class ConexionSequilze {
         }
         return resultado
         }
+        getAllTask= async() => {
+            let resultado = [];
+            this.conectar();
+    
+            resultado = await models.Task.findAll();
+            this.desconectar();
+            return resultado;
+        }
+    
+        getTask = async(id) => {
+            let resultado = [];
+            this.conectar();
+            resultado = await  models.Task.findByPk(id);
+            this.desconectar();
+            if (!resultado){
+                throw error;
+            }
+            return resultado;
+        }
+    
+    
+        insertTask = async(body) => {
+            let resultado = 0;
+            this.conectar();
+            try{
+                const task = new models.Task(body); //Con esto añade los timeStamps.
+                await task.save();
+           
+                resultado = 1;
+            } catch (error) {
+                if (error instanceof Sequelize.UniqueConstraintError) {
+                    console.log(`E ${body.DNI} ya existe en la base de datos.`);
+                } else {
+                    console.log('Ocurrió un error desconocido: ', error);
+                }
+                throw error; 
+            } finally {
+                this.desconectar();
+            }
+            return resultado;
+        }
+    
+        deleteTask = async(id) => {
+            this.conectar();
+            let resultado = await models.Task.findByPk(id);
+            if (!resultado){
+                this.desconectar();
+                throw error;
+            }
+            await resultado.destroy();
+            this.desconectar();
+            return resultado;
+        }
+        updateTaskStatus= async(id)=>{
+            let resultado=0
+            try{
+                this.conectar();
+                let task = await models.Task.findByPk(id);
+               task.done=true
+               task.save()
+            }catch(error){
+                // this.desconectar()
+                console.log(error)
+                throw error
+            }
+            return resultado
+        }
+
+    
 }
 
 module.exports = ConexionSequilze;
