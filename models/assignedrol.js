@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'AssignedRol',
-    tableName: 'assigned_rol',
+    tableName: 'assigned_rols',
     timestamps: false
   });
 

@@ -1,4 +1,5 @@
 require('dotenv').config()
+const bcrypt = require('bcrypt');
 const { Sequelize, Op } = require('sequelize');
 const models = require('../models/index.js');
 
@@ -66,10 +67,12 @@ class ConexionSequilze {
         let resultado = 0;
         this.conectar();
         try{
-            // const usuarioNuevo = new Persona(body); //Con esto añade los timeStamps.
-            // await usuarioNuevo.save();
-            const usuarioNuevo = await models.User.create(body);
-            resultado = 1; // Asume que la inserción fue exitosa
+            const password = await bcrypt.hash(body.password, 10);
+            const usuarioNuevo = new models.User(body); //Con esto añade los timeStamps.
+            usuarioNuevo.password=password
+            await usuarioNuevo.save();
+            // const usuarioNuevo = await models.User.create(body);
+            resultado = usuarioNuevo.id; // Asume que la inserción fue exitosa
         } catch (error) {
             if (error instanceof Sequelize.UniqueConstraintError) {
                 console.log(`El id ${body.id} ya existe en la base de datos.`);
@@ -106,32 +109,20 @@ class ConexionSequilze {
         this.desconectar();
         return resultado;
     }
-
-
-
-    getComments = async() => {
-        let resultado = [];
-        this.conectar();
-        resultado = await models.Comment.findAll();
-        this.desconectar();
-        return resultado;
-    }
-
-    getCommentsId = async(idU) => {
-        let resultado = [];
-        this.conectar();
-        console.log(idU)
-        resultado = await models.User.findAll({ 
-            where: { id: { [Op.eq]: idU } },
-            include: [{
-              model: models.Comment,
-              as: 'commentsUser'
-            }],
-            attributes: ['id', 'firstName', 'lastName', 'email']
-           });
-        this.desconectar();
-        return resultado;
-    }
+    insertAssignedRol=async(id_user,id_rol)=>{
+        let resultado=0
+        try{
+            let rol=new models.AssignedRol()
+            rol.id_rol=id_rol
+            rol.id_user=id_user
+            rol.save()
+        }catch(error){
+           
+            console.log(error)
+            throw error
+        }
+        return resultado
+        }
 }
 
 module.exports = ConexionSequilze;
