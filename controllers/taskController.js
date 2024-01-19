@@ -42,7 +42,70 @@ const editTaskStatus=(req,res= response)=>{
         res.status(203).json('Error al actualizar')
     });
 }
+const editTaskProgress=(req,res= response)=>{
+    const conexion= new Conexion()
+    let progress=req.body.progress
+    if(progress){
 
+        conexion.updateTaskProgress(req.params.id,progress)
+        .then(data=>{
+            res.status(202).json('Actualizado correctamente')
+        })
+        .catch( err => {
+        console.log(err);
+        res.status(203).json('Error al actualizar')
+    });
+}else{
+    res.status(400).json('No se ha introducido el progreso de la tarea')
+}
+}
+
+const addTaskTime=(req,res= response)=>{
+    const conexion= new Conexion()
+    let time=req.body.time
+    if(time){
+
+        conexion.updateTaskTime(req.params.id,time)
+        .then(data=>{
+            res.status(202).json('Actualizado correctamente')
+        })
+        .catch( err => {
+        console.log(err);
+        res.status(203).json('Error al actualizar')
+    });
+}else{
+    res.status(400).json('No se ha introducido el progreso de la tarea')
+}
+}
+const editTaskAssignment=(req,res= response)=>{
+    const conexion= new Conexion()
+    let assignment=req.body.assignment
+    if(assignment){
+
+        conexion.updateTaskAssignment(req.params.id,assignment)
+        .then(data=>{
+            res.status(202).json('Actualizado correctamente')
+        })
+        .catch( err => {
+        console.log(err);
+        res.status(203).json('Error al actualizar')
+    });
+}else{
+    res.status(400).json('No se ha introducido el progreso de la tarea')
+}
+}
+const dropTaskAssignment=(req,res= response)=>{
+    const conexion= new Conexion()
+
+        conexion.updateTaskAssignment(req.params.id,null)
+        .then(data=>{
+            res.status(202).json('Actualizado correctamente')
+        })
+        .catch( err => {
+        console.log(err);
+        res.status(203).json('Error al actualizar')})
+
+}
 const insertTask=(req,res = response)=>{
     const conexion= new Conexion()
     conexion.insertTask(req.body)
@@ -75,5 +138,8 @@ module.exports={
     editTaskStatus,
     insertTask,
     removeTask,
-  
+    editTaskProgress,
+    addTaskTime,
+    editTaskAssignment,
+    dropTaskAssignment,
 }

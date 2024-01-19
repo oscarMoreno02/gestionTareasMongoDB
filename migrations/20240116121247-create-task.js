@@ -43,6 +43,7 @@ module.exports = {
           },
           key: 'id'
         },
+        onDelete:'SET NULL',
         defaultValue: null,
       },
       createdAt: {

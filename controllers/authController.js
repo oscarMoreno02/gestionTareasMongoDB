@@ -1,13 +1,13 @@
 const {response,request} = require('express');
 const Conexion = require('../database/ConexionSequelize');
-const {generarJWT} = require('../helpers/generate_jwt')
 const bcrypt = require('bcrypt');
+const {generarJWT} = require('../helpers/generate_jwt')
 
 const login =  (req, res = response) => {
     const {email, password} = req.body;
     try{
         const conx = new Conexion();
-        u = conx.getUsuarioRegistrado(email)    
+        u = conx.checkLogin(email)    
             .then( usu => {
                 console.log(usu.password)
                 bcrypt.compare(password, usu.password, (err, result) => {
@@ -35,7 +35,7 @@ const login =  (req, res = response) => {
 const register =  (req, res = response) => {
     try{
         const conx = new Conexion();
-        u = conx.registrarUsuario(req.body)    
+        u = conx.insertUser(req.body)    
             .then( usu => {
                 a=conx.insertAssignedRol(usu,2)
                 .then(a=>{

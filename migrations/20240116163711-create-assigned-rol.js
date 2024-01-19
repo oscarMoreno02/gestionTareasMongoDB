@@ -16,7 +16,9 @@ module.exports = {
             tableName: 'rols'
           },
           key: 'id'
-        }
+        },
+        onDelete:'CASCADE'
+        
       },
       id_user: {
         type: Sequelize.INTEGER,
@@ -24,8 +26,10 @@ module.exports = {
           model: {
             tableName: 'users'
           },
+          
           key: 'id'
-        }
+        },
+        onDelete:'CASCADE'
       }
     });
   },

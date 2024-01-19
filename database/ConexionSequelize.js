@@ -28,7 +28,7 @@ class ConexionSequilze {
     desconectar = () => {
         process.on('SIGINT', () => conn.close())
     }
-    getUsuarioRegistrado = async(email) => {
+    checkLogin = async(email) => {
         
         this.conectar();
         let  user = await models.User.findOne(({ where: { email } }));
@@ -41,21 +41,23 @@ class ConexionSequilze {
         return user;
     }
 
-    getlistadoUsuarios = async() => {
+    getAllUser = async() => {
         let resultado = [];
         this.conectar();
         console.log(`Accediendo a los datos...`)
         resultado = await models.User.findAll({
-            attributes: ['id', 'firstName', 'lastName', 'email']
+            attributes: ['id', 'first_name', 'last_name', 'email']
           });
         this.desconectar();
         return resultado;
     }
 
-    getUsuario = async(dni) => {
+    getUser = async(dni) => {
         let resultado = [];
         this.conectar();
-        resultado = await models.User.findByPk(dni);
+        resultado = await models.User.findByPk(dni,{
+            attributes: ['id', 'first_name', 'last_name', 'email']
+          });
         this.desconectar();
         if (!resultado){
             throw error;
@@ -63,7 +65,7 @@ class ConexionSequilze {
         return resultado;
     }
 
-    registrarUsuario = async(body) => {
+    insertUser = async(body) => {
         let resultado = 0;
         this.conectar();
         try{
@@ -71,7 +73,7 @@ class ConexionSequilze {
             const usuarioNuevo = new models.User(body); 
             usuarioNuevo.password=password
             await usuarioNuevo.save();
-            // const usuarioNuevo = await models.User.create(body);
+            // const usuarioNuevo = await models.User.create(body)
             resultado = usuarioNuevo.id; // Asume que la inserción fue exitosa
         } catch (error) {
             if (error instanceof Sequelize.UniqueConstraintError) {
@@ -86,19 +88,35 @@ class ConexionSequilze {
         return resultado;
     }
 
-    modificarUsuario = async(dni, body) => {
+ 
+    updateUserPassword = async(id, pwd) => {
         this.conectar();
-        let resultado = await models.User.findByPk(dni);
-        if (!resultado){
-            this.desconectar();
-            throw error;
-        }
-        await resultado.update(body);
-        this.desconectar();
-        return resultado;
-    }
+        let user = await models.User.findByPk(id);
+        let resultado=0
+        try{
 
-    borrarUsuario = async(dni) => {
+            if (!user){
+                this.desconectar();
+                throw error;
+            }
+            
+            console.log(user)
+            let password=await bcrypt.hash(pwd, 10)
+                user.password=password
+                user.save()
+                resultado=1
+            
+        }catch(err){
+            console.log(err)
+        }
+        finally{
+
+            this.desconectar();
+        }
+            return resultado;
+    } 
+
+    deleteUser = async(dni) => {
         this.conectar();
         let resultado = await models.User.findByPk(dni);
         if (!resultado){
@@ -148,16 +166,14 @@ class ConexionSequilze {
             let resultado = 0;
             this.conectar();
             try{
-                const task = new models.Task(body); //Con esto añade los timeStamps.
+                const task = new models.Task(body); 
                 await task.save();
            
                 resultado = 1;
             } catch (error) {
-                if (error instanceof Sequelize.UniqueConstraintError) {
-                    console.log(`E ${body.DNI} ya existe en la base de datos.`);
-                } else {
+
                     console.log('Ocurrió un error desconocido: ', error);
-                }
+                
                 throw error; 
             } finally {
                 this.desconectar();
@@ -183,15 +199,62 @@ class ConexionSequilze {
                 let task = await models.Task.findByPk(id);
                task.done=true
                task.save()
+               this.desconectar()
             }catch(error){
-                // this.desconectar()
                 console.log(error)
                 throw error
             }
             return resultado
         }
+        updateTaskProgress= async(id,progress)=>{
+            let resultado=0
+            try{
+                console.log(progress)
+                this.conectar();
+                let task = await models.Task.findByPk(id);
+               task.progress=progress
 
-    
+               task.save()
+ 
+            }catch(error){
+              
+                console.log(error)
+                throw error
+            }
+            return resultado
+        }
+        updateTaskTime= async(id,time)=>{
+            let resultado=0
+            try{
+                this.conectar();
+                let task = await models.Task.findByPk(id);
+               task.time_dedicated+=time
+
+               task.save()
+          
+            }catch(error){
+              
+                console.log(error)
+                throw error
+            }
+            return resultado
+        }
+        updateTaskAssignment= async(id,assignment)=>{
+            let resultado=0
+            try{
+                this.conectar();
+                let task = await models.Task.findByPk(id);
+               task.assignment=assignment
+               task.save()
+          
+            }catch(error){
+              
+                console.log(error)
+                throw error
+            }
+            return resultado
+        }
+        
 }
 
 module.exports = ConexionSequilze;
