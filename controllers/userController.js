@@ -68,21 +68,23 @@ const removeUser=(req,res= response)=>{
         res.status(203).json(err)
     })
 }
-const removeUserRol=(req,res= response)=>{
+const removeRolToUser=(req,res= response)=>{
+    console.log('llega')
     const conexion= new Conexion()
-    conexion.deleteAssignedRol(req.body.id_user,req.body.id_rol)
+    conexion.deleteAssignedRol(req.body)
     .then(msg=>{
         console.log('Exito en la eliminacion')
         res.status(202).json(msg)
     })
     .catch(err=>{
+        console.log(err)
         console.log('Error en la eliminacion')
         res.status(203).json(err)
     })
 }
-const addUserRol=(req,res = response)=>{
+const addRolToUser=(req,res = response)=>{
     const conexion= new Conexion()
-    conexion.insertAssignedRol(req.body.id_user,req.body.id_rol)
+    conexion.insertAssignedRol(req.body)
     .then(msg=>{
         console.log('Rol asignado correctamente')
         res.status(201).json(msg)
@@ -98,6 +100,6 @@ module.exports={
  editUserPassword,
  removeUser,
  insertUser,
- removeUserRol,
- addUserRol
+ addRolToUser,
+ removeRolToUser
 }

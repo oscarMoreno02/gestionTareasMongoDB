@@ -15,6 +15,18 @@ const allTask=(req ,res = response)=>{
         res.status(200).json({msg:'No se encontraron tareas'})
     })
 }
+const allAvailableTask=(req ,res = response)=>{
+    const conexion= new Conexion()
+    conexion.getAllAvailableTask()
+    .then(data =>{
+     
+        res.status(200).json({msg:'Listado encontrado',data})
+    })
+    .catch(err =>{
+        console.log(err)
+        res.status(200).json({msg:'No se encontraron tareas'})
+    })
+}
 
 const uniqueTask=(req,res = response)=>{
     const conexion= new Conexion()
@@ -142,4 +154,5 @@ module.exports={
     addTaskTime,
     editTaskAssignment,
     dropTaskAssignment,
+    allAvailableTask
 }
