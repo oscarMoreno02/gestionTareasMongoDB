@@ -143,6 +143,32 @@ const removeTask=(req,res= response)=>{
         res.status(203).json({err:'Error en la eliminacion'})
     })
 }
+const getTaskOfUser =  (req, res = response) => {
+    const conx = new Conexion();
+
+    conx.getTaskUserId(req.params.id)    
+        .then( msg => {
+            console.log('Listado correcto!');
+            res.status(200).json(msg);
+        })
+        .catch( err => {
+            console.log('No hay registros');
+            res.status(203).json({'msg':'No se han encontrado registros'});
+        });
+}
+const getTaskOfAllUser =  (req, res = response) => {
+    const conx = new Conexion();
+
+    conx.getTaskAllUser()    
+        .then( msg => {
+            console.log('Listado correcto!');
+            res.status(200).json(msg);
+        })
+        .catch( err => {
+            console.log('No hay registros');
+            res.status(203).json({'msg':'No se han encontrado registros'});
+        });
+}
 
 module.exports={
     allTask,
@@ -154,5 +180,7 @@ module.exports={
     addTaskTime,
     editTaskAssignment,
     dropTaskAssignment,
-    allAvailableTask
+    allAvailableTask,
+    getTaskOfUser,
+    getTaskOfAllUser
 }

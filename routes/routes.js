@@ -4,7 +4,8 @@ const router = Router();
 const authController=require('../controllers/authController')
 const taskController=require('../controllers/taskController')
 const userController=require('../controllers/userController')
-const rolController=require('../controllers/rolController')
+const rolController=require('../controllers/rolController');
+const task = require('../models/task');
 
 router.put('/login',authController.login)
 router.post('/register',authController.register)
@@ -29,8 +30,15 @@ router.group('/task',(router)=>{
 })
 router.group('/user',(router)=>{
     router.group('/rol',(router)=>{
+        router.get('',rolController.getRolOfAllUser)
+        router.get('/:id',rolController.getRolOfUser)
+
         router.post('',userController.addRolToUser)
         router.delete('',userController.removeRolToUser)
+    })
+    router.group('/task',(router)=>{
+        router.get('',taskController.getTaskOfAllUser)
+        router.get('/:id?',taskController.getTaskOfUser)
     })
     router.get('',userController.allUser)
     router.get('/:id',userController.uniqueUser)

@@ -70,10 +70,38 @@ const removeRol=(req,res= response)=>{
         res.status(203).json(err)
     })
 }
+    const getRolOfUser =  (req, res = response) => {
+        const conx = new Conexion();
+    
+        conx.getRolUserId(req.params.id)    
+            .then( msg => {
+                console.log('Listado correcto!');
+                res.status(200).json(msg);
+            })
+            .catch( err => {
+                console.log('No hay registros');
+                res.status(203).json({'msg':'No se han encontrado registros'});
+            });
+    }
+    const getRolOfAllUser =  (req, res = response) => {
+        const conx = new Conexion();
+    
+        conx.getRolAllUser()    
+            .then( msg => {
+                console.log('Listado correcto!');
+                res.status(200).json(msg);
+            })
+            .catch( err => {
+                console.log('No hay registros');
+                res.status(203).json({'msg':'No se han encontrado registros'});
+            });
+    }
 module.exports={
 allRol,
 uniqueRol,
 editRolDescription,
 removeRol,
-newRol
+newRol,
+getRolOfUser,
+getRolOfAllUser
 }

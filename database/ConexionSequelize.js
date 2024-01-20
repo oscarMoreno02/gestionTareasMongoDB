@@ -347,6 +347,106 @@ class ConexionSequilze {
             this.desconectar();
             return resultado;
         }
+        getRolUserId = async(idU) => {
+           try{
+
+                let resultado = [];
+                this.conectar();
+                resultado = await models.User.findAll({ 
+                where: { id: { [Op.eq]: idU } },
+                include: [{
+                  model: models.AssignedRol,
+                  as:'assigned_rols',
+                  include: [
+                      {
+                          model: models.Rol,
+                          as: 'rol',
+                          attributes: [ 'description'], 
+                        },
+                        
+                    ],
+                    attributes: ['id'], 
+                },
+            ],
+        });
+        this.desconectar();
+        return resultado;
+    }catch(err){
+        console.log(err)
+        this.desconectar()
+    }
+        } 
+        getTaskUserId = async(idU) => {
+            try{
+ 
+                 let resultado = [];
+                 this.conectar();
+                 resultado = await models.User.findAll({ 
+                 where: { id: { [Op.eq]: idU } },
+                 include: [{
+                   model: models.Task,
+                   as:'tasks',
+                 },
+             
+             ],
+         });
+         this.desconectar();
+         return resultado;
+     }catch(err){
+         console.log(err)
+         this.desconectar()
+     }
+         } 
+
+     getRolAllUser = async(idU) => {
+             try{
+                 
+         let resultado = [];
+         this.conectar();
+         resultado = await models.User.findAll({ 
+         include: [{
+           model: models.AssignedRol,
+           as:'assigned_rols',
+           include: [
+               {
+                   model: models.Rol,
+                   as: 'rol',
+                   attributes: [ 'description'], 
+                 },
+                 
+             ],
+             attributes: ['id'], 
+         },
+     ],
+ });
+ this.desconectar();
+ return resultado;
+}catch(err){
+ console.log(err)
+ this.desconectar()
+}
+ } 
+ getTaskAllUser = async() => {
+     try{
+
+          let resultado = [];
+          this.conectar();
+          resultado = await models.User.findAll({ 
+          include: [{
+            model: models.Task,
+            as:'tasks',
+          },
+          
+        ],
+    });
+    this.desconectar();
+    return resultado;
+}catch(err){
+  console.log(err)
+  this.desconectar()
+}
+  } 
+
 }
 
 module.exports = ConexionSequilze;
