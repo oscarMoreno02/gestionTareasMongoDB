@@ -94,6 +94,18 @@ const addRolToUser=(req,res = response)=>{
         res.status(203).json(err)
     })
 }
+const ranking=(req ,res = response)=>{
+    const conexion= new Conexion()
+    conexion.ranking()
+    .then(msg =>{
+        console.log(msg)
+        res.status(200).json({ranking:[msg[0]]})
+    })
+    .catch(err =>{
+        console.log('No se encontraron resultados')
+        res.status(200).json({'msg':'No se encontraron tareas'})
+    })
+}
 module.exports={
  allUser,
  uniqueUser,
@@ -101,5 +113,6 @@ module.exports={
  removeUser,
  insertUser,
  addRolToUser,
- removeRolToUser
+ removeRolToUser,
+ ranking
 }

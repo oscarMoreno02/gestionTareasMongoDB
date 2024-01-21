@@ -31,7 +31,6 @@ router.group('/task',(router)=>{
     router.get('/availables',authMid.validarJWT,taskController.allAvailableTask)
     router.get('',authMid.validarJWT,taskController.allTask)
     router.get('/:id',authMid.validarJWT,taskController.uniqueTask)
-    // router.get('/:id',taskController.uniqueTask)
 
     router.post('',
     [
@@ -72,7 +71,7 @@ router.group('/task',(router)=>{
         validateValues
 
      ],authMid.validarJWT,rolMid.esAdmin,taskController.addTaskTime)
-     
+
     router.delete('/:id',authMid.validarJWT,rolMid.esAdmin,taskController.removeTask)
     
     router.group('/assignment',(router)=>{
@@ -140,7 +139,7 @@ router.group('/user',(router)=>{
          ],authMid.validarJWT,taskMid.checkAssignment,taskController.addTaskTime)
 
         router.put('/pick/:id',authMid.validarJWT,taskMid.isAvailable,taskController.editTaskAssignment)
-
+        router.get('/ranking',authMid.validarJWT,rolMid.esAdmin,userController.ranking)
     })
 
     router.get('',authMid.validarJWT,rolMid.esAdmin,userController.allUser)
