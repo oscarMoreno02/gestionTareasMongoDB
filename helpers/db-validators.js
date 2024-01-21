@@ -1,4 +1,6 @@
-const Conexion = require('../database/Conexion');
+const {response,request} = require('express');
+const Conexion = require('../database/ConexionSequelize');
+
 const CustomError = require('./CustomError')
 
 // const dniExiste = ( dni = '' ) => {
@@ -14,30 +16,69 @@ const CustomError = require('./CustomError')
 //         });
 // }
 
-const dniExiste = (dni = '') => {
+const emailExist = (email = '') => {
     return new Promise((resolve, reject) => {
       const conx = new Conexion();
-      conx.dniExisteValidator(dni)
+      conx.checkLogin(email)
         .then(msg => {
-          console.log('Existe');
-          resolve(true);
+          
+          reject(new Error('Email registrado'));
         })
         .catch(err => {
-          console.log('No existe');
-          reject(new Error('DNI existe'));
+          resolve(true);
         });
     });
    };
-
-const edadCorrecta = async(edad)=>{
-    if (edad <0){
-        throw new Error('Edad incorrecta');
+   const timeCorrect = async(t)=>{
+    if (t <1){
+        throw new Error('Cantidad introducida incorrecta');
     }
 }
 
-
+const userExist = (id = '') => {
+  return new Promise((resolve, reject) => {
+    const conx = new Conexion();
+    conx.getUser(id)
+      .then(msg => {
+        
+        resolve(true);
+      })
+      .catch(err => {
+        reject(new Error('ID de usuario no registrado'));
+      });
+  });
+ };
+ const taskExist = (id = '') => {
+  return new Promise((resolve, reject) => {
+    const conx = new Conexion();
+    conx.getTask(id)
+      .then(msg => {
+        
+        resolve(true);
+      })
+      .catch(err => {
+        reject(new Error('ID de tarea no registrado'));
+      });
+  });
+ };
+ const rolExist = (id = '') => {
+  return new Promise((resolve, reject) => {
+    const conx = new Conexion();
+    conx.getRol(id)
+      .then(msg => {
+        resolve(true);
+      })
+      .catch(err => {
+        reject(new Error('ID de rol no registrado'));
+      });
+  });
+ };
+ 
 module.exports = {
-    dniExiste,
-    edadCorrecta
+    emailExist,
+  timeCorrect,
+  userExist,
+  taskExist,
+  rolExist
 }
 

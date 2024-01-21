@@ -17,6 +17,22 @@ const isAvailable=(req,res,next)=>{
         res.status(400).json({msg:'No exite una tarea con ese id'})
     })
 }
+const isAssigned=(req,res,next)=>{
+    const conexion= new Conexion()
+    console.log(req.params.id)
+    conexion.getTask(req.params.id)
+    .then(data=>{
+            if(data.assignment!=null){
+                next()
+            }else{
+                res.status(400).json('Tarea sin asignacion')
+            }
+    })
+    .catch(err=>{
+        console.log(err)
+        res.status(400).json({msg:'No exite una tarea con ese id'})
+    })
+}
 const checkAssignment=(req,res,next)=>{
     const conexion= new Conexion()
     console.log(req.params.id)
@@ -35,5 +51,6 @@ const checkAssignment=(req,res,next)=>{
 }
 module.exports={
     isAvailable,
-    checkAssignment
+    checkAssignment,
+    isAssigned
 }

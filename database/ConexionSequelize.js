@@ -36,7 +36,7 @@ class ConexionSequilze {
  
         this.desconectar();
         if (!user){
-            throw error;
+            throw new Error('Email no registrado');
         }
 
         return user;
