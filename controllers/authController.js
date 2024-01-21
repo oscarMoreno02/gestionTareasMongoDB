@@ -12,7 +12,7 @@ const login =  (req, res = response) => {
                 console.log(usu.password)
                 bcrypt.compare(password, usu.password, (err, result) => {
                     if (result) {
-                        const token = generarJWT(usu.email)
+                        const token = generarJWT(usu.id)
                         res.status(200).json({token});
                     } else {
                         
@@ -35,12 +35,18 @@ const login =  (req, res = response) => {
 const register =  (req, res = response) => {
     try{
         const conx = new Conexion();
-        u = conx.insertUser(req.body)    
+            conx.insertUser(req.body)    
             .then( usu => {
-                a=conx.insertAssignedRol(usu,2)
+                let data={
+                    id_user: usu,
+                    id_rol: 1
+                }
+                console.log(usu)
+                a=conx.insertAssignedRol(data)
+                
                 .then(a=>{
 
-                    const token = generarJWT(req.body.email)
+                    const token = generarJWT(usu)
                     res.status(200).json({msg:'Registro correcto',token});
                 })
                 .catch(err=>{

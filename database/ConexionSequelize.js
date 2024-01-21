@@ -446,6 +446,27 @@ class ConexionSequilze {
   this.desconectar()
 }
   } 
+  userCan = async(id,abilitie) => {
+    let can=0
+    try{
+
+         let resultado = [];
+         this.conectar();
+         resultado = await models.AssignedRol.findOne({where: {id_user: id},id_rol:abilitie});
+   this.desconectar();
+   if(resultado){
+
+       can= 1;
+    }
+}catch(err){
+ console.log(err)
+ this.desconectar()
+ can= 0
+}
+finally{
+    return can
+}
+ } 
 
 }
 

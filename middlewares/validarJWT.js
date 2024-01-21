@@ -11,7 +11,7 @@ const validarJWT = (req , res , next) => {
     try {
         
         const {uid} = jwt.verify(token, process.env.TOKENKEYWORD);
-        req.dniToken = uid;
+        req.uid = uid;
         console.log(uid);
         console.log(token);
         next();
