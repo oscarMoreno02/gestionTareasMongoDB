@@ -27,11 +27,12 @@ router.post('/register',
 authController.register)
 
 router.group('/task',(router)=>{
-
+    router.get('/completed',authMid.validarJWT,taskController.getTaskDone)
+    router.get('/uncompleted',authMid.validarJWT,taskController.getTaskUndone)
     router.get('/availables',authMid.validarJWT,taskController.allAvailableTask)
     router.get('',authMid.validarJWT,taskController.allTask)
     router.get('/:id',authMid.validarJWT,taskController.uniqueTask)
-
+ 
     router.post('',
     [
         check('description', 'La descripcion es obligatoria').not().isEmpty(),
@@ -116,7 +117,7 @@ router.group('/user',(router)=>{
 
     })
     router.group('/task',(router)=>{
-        
+
         router.put('/progress/:id',
         [
             check('progress', 'El progreso es obligatorio').not().isEmpty(),

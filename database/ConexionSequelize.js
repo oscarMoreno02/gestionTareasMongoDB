@@ -145,6 +145,17 @@ class ConexionSequilze {
         this.desconectar();
         return resultado;
     }
+    getTaskByStatus = async (status) => {
+        let resultado = [];
+        this.conectar();
+        resultado = await models.Task.findAll({
+            where: {
+                done: status
+            }
+        })
+        this.desconectar();
+        return resultado;
+    }
     getAllAvailableTask = async () => {
         let resultado = [];
         this.conectar();

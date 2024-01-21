@@ -15,6 +15,30 @@ const allTask=(req ,res = response)=>{
         res.status(200).json({msg:'No se encontraron tareas'})
     })
 }
+const getTaskDone=(req,res  = response)=>{
+    const conexion= new Conexion()
+    conexion.getTaskByStatus(true)
+    .then(data =>{
+     
+        res.status(200).json({msg:'Listado encontrado',data})
+    })
+    .catch(err =>{
+        console.log(err)
+        res.status(200).json({msg:'No se encontraron tareas'})
+    })
+}
+const getTaskUndone=(req,res  = response)=>{
+    const conexion= new Conexion()
+    conexion.getTaskByStatus(false)
+    .then(data =>{
+     
+        res.status(200).json({msg:'Listado encontrado',data})
+    })
+    .catch(err =>{
+        console.log(err)
+        res.status(200).json({msg:'No se encontraron tareas'})
+    })
+}
 const allAvailableTask=(req ,res = response)=>{
     const conexion= new Conexion()
     conexion.getAllAvailableTask()
@@ -182,5 +206,7 @@ module.exports={
     dropTaskAssignment,
     allAvailableTask,
     getTaskOfUser,
-    getTaskOfAllUser
+    getTaskOfAllUser,
+    getTaskDone,
+    getTaskUndone
 }
