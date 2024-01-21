@@ -8,7 +8,7 @@ const rolController=require('../controllers/rolController');
 const task = require('../models/task');
 const authMid=require('../middlewares/validarJWT')
 const rolMid=require('../middlewares/validarRoles')
-
+const taskMid=require('../middlewares/TareaMid')
 router.put('/login',authController.login)
 router.post('/register',authController.register)
 
@@ -38,12 +38,10 @@ router.group('/user',(router)=>{
         router.delete('',authMid.validarJWT,rolMid.esAdmin,userController.removeRolToUser)
     })
     router.group('/task',(router)=>{
-        router.get('',authMid.validarJWT,rolMid.esAdmin,taskController.getTaskOfAllUser)
-        router.get('/:id?',authMid.validarJWT,rolMid.esAdmin,taskController.getTaskOfUser)
-        router.put('/progress/:id',authMid.validarJWT,taskController.editTaskProgress)
-        router.put('/time/:id',authMid.validarJWT,taskController.addTaskTime)
-        router.delete('/:id',authMid.validarJWT,taskController.removeTask)
-        router.put('/pick/:id',authMid.validarJWT,taskController.editTaskAssignment)
+        router.put('/progress/:id',authMid.validarJWT,taskMid.checkAssignment,taskController.editTaskProgress)
+        router.put('/status/:id',authMid.validarJWT,taskMid.checkAssignment,taskController.editTaskStatus)
+        router.put('/time/:id',authMid.validarJWT,taskMid.checkAssignment,taskController.addTaskTime)
+        router.put('/pick/:id',authMid.validarJWT,taskMid.isAvailable,taskController.editTaskAssignment)
     })
     router.get('',authMid.validarJWT,rolMid.esAdmin,userController.allUser)
     router.get('/:id',authMid.validarJWT,rolMid.esAdmin,userController.uniqueUser)

@@ -193,7 +193,12 @@ class ConexionSequilze {
             try{
                 this.conectar();
                 let task = await models.Task.findByPk(id);
-               task.done=true
+                if(task.done==true){
+
+                    task.done=false
+                }else{
+                    task.done=true
+                }
             await  task.save()
                this.desconectar()
             }catch(error){

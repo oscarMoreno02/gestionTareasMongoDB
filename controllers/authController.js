@@ -46,7 +46,7 @@ const register =  (req, res = response) => {
                 
                 .then(a=>{
 
-                    const token = generarJWT(usu)
+                    const token = generarJWT(usu.id)
                     res.status(200).json({msg:'Registro correcto',token});
                 })
                 .catch(err=>{

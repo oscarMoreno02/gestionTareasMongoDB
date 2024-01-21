@@ -96,14 +96,14 @@ const editTaskAssignment=(req,res= response)=>{
 
         conexion.updateTaskAssignment(req.params.id,assignment)
         .then(data=>{
-            res.status(202).json('Actualizado correctamente')
+            res.status(202).json('Asignado correctamente')
         })
         .catch( err => {
         console.log(err);
-        res.status(203).json('Error al actualizar')
+        res.status(203).json('Error al asignar')
     });
 }else{
-    res.status(400).json('No se ha introducido el progreso de la tarea')
+    res.status(400).json('Argumentos no validos')
 }
 }
 const dropTaskAssignment=(req,res= response)=>{
