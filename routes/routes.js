@@ -90,6 +90,12 @@ router.group('/task',(router)=>{
 
 })
 router.group('/user',(router)=>{
+    router.put('',  
+    [
+        check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
+        validateValues
+    
+     ],authMid.validarJWT,userController.updatePassword)
 
     router.group('/rol',(router)=>{
 
@@ -110,6 +116,7 @@ router.group('/user',(router)=>{
 
     })
     router.group('/task',(router)=>{
+        
         router.put('/progress/:id',
         [
             check('progress', 'El progreso es obligatorio').not().isEmpty(),

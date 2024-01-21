@@ -106,6 +106,19 @@ const ranking=(req ,res = response)=>{
         res.status(200).json({'msg':'No se encontraron tareas'})
     })
 }
+const updatePassword=(req,res= response)=>{
+    const conexion= new Conexion()
+    conexion.updateUserPassword(req.uid,req.body.password)
+    .then(msg=>{
+        console.log('Actualizaddo correctamente')
+        res.status(202).json('Actualizado correctamente')
+    })
+    .catch( err => {
+        console.log(err);
+        res.status(203).json('Error al actualizar')
+    });
+}
+
 module.exports={
  allUser,
  uniqueUser,
@@ -114,5 +127,6 @@ module.exports={
  insertUser,
  addRolToUser,
  removeRolToUser,
- ranking
+ ranking,
+ updatePassword
 }
