@@ -10,8 +10,9 @@ const validarJWT = (req , res , next) => {
 
     try {
         
-        const {uid} = jwt.verify(token, process.env.TOKENKEYWORD);
+        const {uid, abilities} = jwt.verify(token, process.env.TOKENKEYWORD);
         req.uid = uid;
+        req.abilities=abilities
         console.log(uid);
         console.log(token);
         next();
