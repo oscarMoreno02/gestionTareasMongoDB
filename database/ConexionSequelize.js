@@ -474,6 +474,7 @@ class ConexionSequilze {
             let resultado = [];
             this.conectar();
             resultado = await models.User.findAll({
+                attributes: ['first_name','last_name','email','createdAt','updatedAt'],
                 include: [{
                         model: models.Task,
                         as: 'tasks',

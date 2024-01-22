@@ -155,8 +155,8 @@ router.group('/user',(router)=>{
 
         router.put('/pick/:id',authMid.validarJWT,taskMid.isAvailable,taskController.editTaskAssignment)
         router.get('/ranking',authMid.validarJWT,rolMid.esAdmin,userController.ranking)
-        router.get('/ranking',authMid.validarJWT,rolMid.esAdmin,taskController.getTaskOfUser)
-        router.get('',authMid.validarJWT,taskMid.isAvailable,taskController.getTaskOfAllUser)
+        router.get('',authMid.validarJWT,rolMid.esAdmin,taskController.getTaskOfAllUser)
+        router.get('/:id',authMid.validarJWT,rolMid.esAdmin,taskController.getTaskOfUser)
     })
 
     router.get('',authMid.validarJWT,rolMid.esAdmin,userController.allUser)
