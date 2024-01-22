@@ -27,12 +27,15 @@ router.post('/register',
 authController.register)
 
 router.group('/task',(router)=>{
+
     router.get('/completed',authMid.validarJWT,taskController.getTaskDone)
     router.get('/uncompleted',authMid.validarJWT,taskController.getTaskUndone)
     router.get('/availables',authMid.validarJWT,taskController.allAvailableTask)
     router.get('',authMid.validarJWT,taskController.allTask)
     router.get('/:id',authMid.validarJWT,taskController.uniqueTask)
     router.get('/:id/recomendation',authMid.validarJWT,rolMid.esAdmin,taskController.evaluateUsers)
+
+
     router.post('',
     [
         check('description', 'La descripcion es obligatoria').not().isEmpty(),
@@ -90,6 +93,10 @@ router.group('/task',(router)=>{
     })
 
 })
+
+
+
+
 router.group('/user',(router)=>{
     router.put('',  
     [
@@ -148,6 +155,8 @@ router.group('/user',(router)=>{
 
         router.put('/pick/:id',authMid.validarJWT,taskMid.isAvailable,taskController.editTaskAssignment)
         router.get('/ranking',authMid.validarJWT,rolMid.esAdmin,userController.ranking)
+        router.get('/ranking',authMid.validarJWT,rolMid.esAdmin,taskController.getTaskOfUser)
+        router.get('',authMid.validarJWT,taskMid.isAvailable,taskController.getTaskOfAllUser)
     })
 
     router.get('',authMid.validarJWT,rolMid.esAdmin,userController.allUser)
