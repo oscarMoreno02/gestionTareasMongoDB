@@ -119,6 +119,7 @@ const updatePassword=(req,res= response)=>{
     });
 }
 
+
 module.exports={
  allUser,
  uniqueUser,

@@ -32,7 +32,7 @@ router.group('/task',(router)=>{
     router.get('/availables',authMid.validarJWT,taskController.allAvailableTask)
     router.get('',authMid.validarJWT,taskController.allTask)
     router.get('/:id',authMid.validarJWT,taskController.uniqueTask)
- 
+    router.get('/:id/recomendation',authMid.validarJWT,rolMid.esAdmin,taskController.evaluateUsers)
     router.post('',
     [
         check('description', 'La descripcion es obligatoria').not().isEmpty(),
