@@ -48,7 +48,7 @@ router.group('/task',(router)=>{
 
      ],
     authMid.validarJWT,rolMid.esAdmin,taskController.insertTask)
-
+    router.put('/full/:id',authMid.validarJWT,rolMid.esAdmin,taskController.fullUpdate)
     router.put('/status/:id',   
     [
         check('status', 'El estado es obligatorio').not().isEmpty(),

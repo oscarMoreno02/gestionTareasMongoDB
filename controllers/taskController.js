@@ -106,6 +106,20 @@ const editTaskStatus = (req, res = response) => {
             res.status(203).json('Error al actualizar')
         });
 }
+
+const fullUpdate= (req, res = response)=>{
+    const conexion = new Conexion()
+    conexion.updateFullTask(req.params.id,req.body)
+    .then(data => {
+        console.log(data)
+        res.status(202).json('Actualizado correctamente')
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(203).json('Error al actualizar')
+    });
+
+}
 const editTaskProgress = (req, res = response) => {
     const conexion = new Conexion()
     let progress = req.body.progress
@@ -351,6 +365,8 @@ basePoints = (taskToDo, referenceTask) => {
     }else{
         base=base/(((referenceTask.time_dedicated-referenceTask.time_estimated)/10)+1)
     }
+
+    console.log('llega')
     return base
 }
 module.exports = {
@@ -368,5 +384,6 @@ module.exports = {
     getTaskOfAllUser,
     getTaskDone,
     getTaskUndone,
-    evaluateUsers
+    evaluateUsers,
+    fullUpdate
 }

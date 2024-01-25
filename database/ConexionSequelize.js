@@ -248,6 +248,15 @@ class ConexionSequilze {
         }
         return resultado
     }
+    updateFullTask = async (id,body) => {
+        let resultado = 0
+     
+            this.conectar();
+            let task = await models.Task.findByPk(id);
+           await task.update(body)
+        
+        return resultado
+    }
     updateTaskTime = async (id, time) => {
         let resultado = 0
         try {
