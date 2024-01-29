@@ -19,7 +19,7 @@ const validarJWT = (req , res , next) => {
         
     }catch(error){
         console.log(error);
-        res.status(401).json({'msg':'Token no válido.'});
+        res.status(400).json({'msg':'Token no válido.'});
     }
 }
 

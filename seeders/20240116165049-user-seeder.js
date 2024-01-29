@@ -1,5 +1,5 @@
 'use strict';
-
+const bcrypt = require('bcrypt');
 
 const {userFactory} = require('../factories/userFactory')
 /** @type {import('sequelize-cli').Migration} */

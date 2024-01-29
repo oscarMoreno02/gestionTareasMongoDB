@@ -19,7 +19,7 @@ const login =  (req, res = response) => {
                                 r.push(roles[0].assigned_rols[i].rol.description)
                             }
        
-                            const token = generarJWT(usu.id,r)
+                            const token = generarJWT(usu.id,r,usu.first_name)
                             res.status(200).json({token});
                 
                         })
@@ -55,7 +55,7 @@ const register =  (req, res = response) => {
                 
                 .then(a=>{
 
-                    const token = generarJWT(usu,['programmer'])
+                    const token = generarJWT(usu,['programmer'],req.body.first_name)
                     res.status(200).json({msg:'Registro correcto',token});
                 })
                 .catch(err=>{

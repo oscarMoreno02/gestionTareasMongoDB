@@ -124,7 +124,7 @@ router.group('/user',(router)=>{
 
     })
     router.group('/task',(router)=>{
-
+        router.put('/full/:id',authMid.validarJWT,taskMid.checkAssignment,taskController.fullUpdate)
         router.put('/progress/:id',
         [
             check('progress', 'El progreso es obligatorio').not().isEmpty(),

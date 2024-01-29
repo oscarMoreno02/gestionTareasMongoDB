@@ -9,7 +9,7 @@ const esAdmin = (req, res, next) => {
         if(req.abilities.includes('admin')){
             next()
         }else{
-            return res.status(500).json('Acceso no autorizado')
+            return res.status(401).json('Acceso no autorizado')
         }
 
     
