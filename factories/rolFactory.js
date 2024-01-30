@@ -7,7 +7,7 @@ const {
 const rolFactory = async (ctos = 1) => {
     let factory = [
         admin = {
-            description: 'administrator',
+            description: 'admin',
             createdAt: new Date(),
             updatedAt: new Date()
         },
