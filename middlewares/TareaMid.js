@@ -1,5 +1,5 @@
 const {response,request} = require('express');
-const Conexion = require('../database/ConexionSequelize');
+const Conexion = require('../database/ConexionMongo')
 
 const isAvailable=(req,res,next)=>{
     const conexion= new Conexion()

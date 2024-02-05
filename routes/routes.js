@@ -162,16 +162,7 @@ router.group('/user',(router)=>{
     router.get('',authMid.validarJWT,rolMid.esAdmin,userController.allUser)
     router.get('/:id',authMid.validarJWT,rolMid.esAdmin,userController.uniqueUser)
 
-    router.post('',
-    [
-        check('email').custom( emailExist),
-        check('first_name', 'El nombre es obligatorio').not().isEmpty(),
-        check('last_name', 'El apellido es obligatorio').not().isEmpty(),
-        check('password', 'El password debe de ser más de 6 letras').isLength({ min: 6 }),
-        check('email', 'El correo no es válido').isEmail(),
-        validateValues
-    
-     ],authMid.validarJWT,rolMid.esAdmin,userController.insertUser)
+    router.post('',userController.insertUser)
 
     router.put('/:id',
     [

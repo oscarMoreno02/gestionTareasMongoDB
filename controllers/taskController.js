@@ -3,7 +3,7 @@ const {
     response,
     request
 } = require('express');
-const Conexion = require('../database/ConexionSequelize');
+const Conexion = require('../database/ConexionMongo')
 const bcrypt = require('bcrypt');
 
 const allTask = (req, res = response) => {

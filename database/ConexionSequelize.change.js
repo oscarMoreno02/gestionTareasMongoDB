@@ -35,22 +35,22 @@ class ConexionSequilze {
     desconectar = () => {
         process.on('SIGINT', () => conn.close())
     }
-    checkLogin = async (email) => {
+    // checkLogin = async (email) => {
 
-        this.conectar();
-        let user = await models.User.findOne(({
-            where: {
-                email
-            }
-        }));
+    //     this.conectar();
+    //     let user = await models.User.findOne(({
+    //         where: {
+    //             email
+    //         }
+    //     }));
 
-        this.desconectar();
-        if (!user) {
-            throw new Error('Email no registrado');
-        }
+    //     this.desconectar();
+    //     if (!user) {
+    //         throw new Error('Email no registrado');
+    //     }
 
-        return user;
-    }
+    //     return user;
+    // }
 
     getAllUser = async () => {
         let resultado = [];

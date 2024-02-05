@@ -1,13 +1,13 @@
 const {response,request} = require('express');
-const Conexion = require('../database/ConexionSequelize');
+const {ConexionMongo} = require('../database/ConexionMongo');
 const bcrypt = require('bcrypt');
 const {generarJWT} = require('../helpers/generate_jwt')
 
 const login =  (req, res = response) => {
     const {email, password} = req.body;
     try{
-        const conx = new Conexion();
-        u = conx.checkLogin(email)    
+        const conx = new ConexionMongo();
+        conx.checkLogin(email)    
             .then( usu => {
                 console.log(usu.password)
                 bcrypt.compare(password, usu.password, (err, result) => {
@@ -15,6 +15,7 @@ const login =  (req, res = response) => {
                         conx.getRolUserId(usu.id)
                         .then(roles=>{
                             let r=[]
+                            console.log(roles)
                             for(let i=0;i<roles[0].assigned_rols.length;i++){
                                 r.push(roles[0].assigned_rols[i].rol.description)
                             }
@@ -43,18 +44,17 @@ const login =  (req, res = response) => {
 }
 const register =  (req, res = response) => {
     try{
-        const conx = new Conexion();
-            conx.insertUser(req.body)    
+        const conx = new ConexionMongo();
+            conx.insertUser(req)    
             .then( usu => {
+               
                 let data={
                     id_user: usu,
                     id_rol: 2
                 }
-                console.log(usu)
-                a=conx.insertAssignedRol(data)
-                
+              
+               conx.insertAssignedRol(data) 
                 .then(a=>{
-
                     const token = generarJWT(usu,['programmer'],req.body.first_name)
                     res.status(200).json({msg:'Registro correcto',token});
                 })
@@ -63,7 +63,9 @@ const register =  (req, res = response) => {
                 })
             })
             .catch( err => {
-                res.status(500).json({'msg':'Error en el registro'});
+                console.log(err)
+                
+                res.status(500).json(err);
             });
     }
     catch(error){

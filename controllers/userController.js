@@ -1,6 +1,6 @@
 
 const {response,request} = require('express');
-const Conexion = require('../database/ConexionSequelize');
+const {ConexionMongo} = require('../database/ConexionMongo')
 const bcrypt = require('bcrypt');
 const allUser=(req ,res = response)=>{
     const conexion= new Conexion()
@@ -44,7 +44,7 @@ const editUserPassword=(req,res= response)=>{
 }
 
 const insertUser=(req,res = response)=>{
-    const conexion= new Conexion()
+    let conexion = new ConexionMongo()
     conexion.insertUser(req.body)
     .then(msg=>{
         console.log('Persona registrada correctamente')

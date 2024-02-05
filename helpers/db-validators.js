@@ -1,5 +1,5 @@
 const {response,request} = require('express');
-const Conexion = require('../database/ConexionSequelize');
+const {ConexionMongo} = require('../database/ConexionMongo')
 
 const CustomError = require('./CustomError')
 
@@ -18,10 +18,10 @@ const CustomError = require('./CustomError')
 
 const emailExist = (email = '') => {
     return new Promise((resolve, reject) => {
-      const conx = new Conexion();
+      const conx = new ConexionMongo();
       conx.checkLogin(email)
         .then(msg => {
-          
+          console.log('llega')
           reject(new Error('Email registrado'));
         })
         .catch(err => {
@@ -37,7 +37,7 @@ const emailExist = (email = '') => {
 
 const userExist = (id = '') => {
   return new Promise((resolve, reject) => {
-    const conx = new Conexion();
+    const conx = new ConexionMongo();
     conx.getUser(id)
       .then(msg => {
         
@@ -50,7 +50,7 @@ const userExist = (id = '') => {
  };
  const taskExist = (id = '') => {
   return new Promise((resolve, reject) => {
-    const conx = new Conexion();
+    const conx = new ConexionMongo();
     conx.getTask(id)
       .then(msg => {
         
@@ -63,7 +63,7 @@ const userExist = (id = '') => {
  };
  const rolExist = (id = '') => {
   return new Promise((resolve, reject) => {
-    const conx = new Conexion();
+    const conx = new ConexionMongo();
     conx.getRol(id)
       .then(msg => {
         resolve(true);
