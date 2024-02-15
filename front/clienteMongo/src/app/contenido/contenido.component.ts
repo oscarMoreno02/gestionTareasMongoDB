@@ -7,11 +7,12 @@ import { PeticionesService } from '../peticiones.service';
 import { Rol, User } from '../user';
 import { Tablas } from '../tablas';
 import { UserComponent } from '../user/user.component';
+import { TasksComponent } from '../tasks/tasks.component';
 
 @Component({
   selector: 'app-contenido',
   standalone: true,
-  imports: [DropdownModule,FormsModule,UserComponent],
+  imports: [DropdownModule,FormsModule,UserComponent,TasksComponent],
   templateUrl: './contenido.component.html',
   styleUrl: './contenido.component.css'
 })

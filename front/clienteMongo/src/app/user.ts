@@ -10,3 +10,11 @@ export interface Rol {
     id:number,
     description:string
 }
+export interface Task {
+    id: number,
+    description: string,
+    difficulty: string,
+    time_estimated: number,
+    time_dedicated?:number,
+    assignment?:number
+}

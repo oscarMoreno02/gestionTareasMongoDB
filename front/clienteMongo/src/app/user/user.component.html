@@ -21,6 +21,7 @@
     }
     @if(url.verbo=='get'){
         @switch (url.tabla) {
+
         @case ('user') {
             @if(url.requireId){
                 <br>   id :<span>{{userView.id}}</span> 
