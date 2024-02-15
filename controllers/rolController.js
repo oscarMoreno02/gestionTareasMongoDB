@@ -1,9 +1,9 @@
 const{response,request}=require('express')
-const Conexion = require('../database/ConexionMongo')
+const {ConexionMongo} = require('../database/ConexionMongo');
 
 
 const allRol=(req ,res = response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.getAllRol()
     .then(msg =>{
         console.log('Listado encontrado')
@@ -16,7 +16,7 @@ const allRol=(req ,res = response)=>{
 }
 
 const uniqueRol=(req,res = response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     console.log(req.params.id)
     conexion.getRol(req.params.id)
     .then(msg=>{
@@ -32,7 +32,7 @@ const uniqueRol=(req,res = response)=>{
 }
 
 const editRolDescription=(req,res= response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.updateRol(req.params.id,req.body.description)
     .then(msg=>{
         console.log('Actualizado correctamente')
@@ -45,7 +45,7 @@ const editRolDescription=(req,res= response)=>{
 }
 
 const newRol=(req,res = response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
 
     conexion.insertRol(req.body)
     .then(msg=>{
@@ -53,13 +53,14 @@ const newRol=(req,res = response)=>{
         res.status(201).json(msg)
     })
     .catch(err=>{
+        console.log(err)
         console.log('Error en el registro')
         res.status(203).json(err)
     })
 }
 
 const removeRol=(req,res= response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.deleteRol(req.body)
     .then(msg=>{
         console.log('Exito en la eliminacion')
@@ -71,7 +72,7 @@ const removeRol=(req,res= response)=>{
     })
 }
     const getRolOfUser =  (req, res = response) => {
-        const conx = new Conexion();
+        const conx = new ConexionMongo();
     
         conx.getRolUserId(req.params.id)    
             .then( msg => {
@@ -84,7 +85,7 @@ const removeRol=(req,res= response)=>{
             });
     }
     const getRolOfAllUser =  (req, res = response) => {
-        const conx = new Conexion();
+        const conx = new ConexionMongo();
     
         conx.getRolAllUser()    
             .then( msg => {

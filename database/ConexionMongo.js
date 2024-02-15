@@ -10,6 +10,13 @@ class ConexionMongo{
     
     insertUser = async (req, res) => {
     try {
+        try{
+            let ultimo= await UserModel.find().sort({id:-1})
+            req.body.id=parseInt(ultimo[0].id+1)
+        }
+        catch(e){
+            req.body.id=1
+        }
         req.body.password= await bcrypt.hash(req.body.password, 10);
         await UserModel.create(req.body);
     
@@ -29,15 +36,15 @@ checkLogin = async (e) => {
     return user;
 }
 getAllUser = async () => {
-
-    const resultado = await UserModel.find({}, { id: 1, first_name: 1, last_name: 1, email: 1 });
+   
+    const resultado = await UserModel.findAll();
 
     return resultado;
 }
 
-getUser = async (dni) => {
+getUser = async (id) => {
 
-    const resultado = await UserModel.findOne({ dni: dni }, { id: 1, first_name: 1, last_name: 1, email: 1 });
+    const resultado = await UserModel.findOne({ id: id });
 
     if (!resultado) {
         throw error;
@@ -50,7 +57,7 @@ getUser = async (dni) => {
 
 updateUserPassword = async (id, pwd) => {
 
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findOne({ id: id });
 
     let resultado = 0
     try {
@@ -94,7 +101,7 @@ getAllAvailableTask = async () => {
     return resultado;
 }
 getTask = async (id) => {
-    const resultado = await TaskModel.findById(id);
+    const resultado = await TaskModel.findOne({ id: id });
     if (!resultado) {
         throw error;
     }
@@ -126,7 +133,7 @@ deleteTask = async (id) => {
 updateTaskStatus = async (id) => {
     let resultado = 0
     try {
-        let task = await TaskModel.findById(id);
+        let task = await TaskModel.findOne({ id: id });
         if (task.done == true) {
             task.done = false
         } else {
@@ -142,7 +149,7 @@ updateTaskStatus = async (id) => {
 updateTaskProgress = async (id, progress) => {
     let resultado = 0
     try {
-        let task = await TaskModel.findById(id);
+        let task = await TaskModel.findOne({ id: id });
         task.progress = progress
         await task.save()
     } catch (error) {
@@ -154,7 +161,7 @@ updateTaskProgress = async (id, progress) => {
 }
 updateFullTask = async (id,body) => {
     let resultado = 0
-        let task = await TaskModel.findById(id);;
+        let task = await TaskModel.findOne({ id: id });;
        await task.update(body)
     
     return resultado
@@ -162,7 +169,7 @@ updateFullTask = async (id,body) => {
 updateTaskTime = async (id, time) => {
     let resultado = 0
     try {
-        let task = await TaskModel.findById(id);;
+        let task = await TaskModel.findOne({ id: id });;
         task.time_dedicated += time
         await task.save()
     } catch (error) {
@@ -173,7 +180,7 @@ updateTaskTime = async (id, time) => {
 updateTaskAssignment = async (id, assignment) => {
     let resultado = 0
     try {
-        let task = await TaskModel.findById(id);
+        let task = await TaskModel.findOne({ id: id });
         task.assignment = assignment
         await task.save()
     } catch (error) {
@@ -191,7 +198,7 @@ getAllRol = async () => {
 getRol = async (id) => {
     try {
         let resultado = [];
-        resultado = await  RolModel.findById(id);
+        resultado = await  RolModel.findOne({ id: id });
         return resultado;
     } catch (err) {
         console.log(err)
@@ -228,7 +235,7 @@ getRolesAsignados = async () => {
 updateRol = async (id, description) => {
     let resultado = 0
     try {
-        let task = await RolModel.findById(id);
+        let task = await RolModel.findOne({ id: id });
         task.description = description
         await task.save()
     } catch (error) {
@@ -239,74 +246,94 @@ updateRol = async (id, description) => {
 }
 insertRol = async (body) => {
     let resultado = 0;
-    this.conectar();
     try {
+        try{
+            let ultimo= await RolModel.find().sort({id:-1})
+            body.id=parseInt(ultimo[0].id+1)
+        }
+        catch(e){
+            body.id=1
+        }
         const rol = await RolModel.create(body)
-        // rol.description = body.description
-        // console.log(body.description)
-        // await rol.save();
 
         resultado = 1;
     } catch (error) {
+        console.log(error)
         console.log('Ocurrió un error desconocido: ', error);
         throw error;
     } finally {
-        this.desconectar();
+
     }
     return resultado;
 }
 deleteRol = async (id) => {
     let resultado = [];
     this.conectar();
-    let rol = await  RolModel.findByIdAndDelete(id);
-    await rol.destroy()
+    let rol = await  RolModel.findOneAndDelete({ id: id });
+  
     this.desconectar();
     return resultado;
 }
 getRolUserId = async (idU) => {
-    try {
-
-        let id = new ObjectId(idU);
-        
-        const resultado = await UserModel.aggregate([
-            { $match: { id: idU } },
-            {
-                $lookup: {
-                    from: "assigned_rols",
-                    localField: "id",
-                    foreignField: "id_user",
-                    as: "assigned_rols"
-                }
-            },
-            {
-                $lookup: {
-                    from: "roles",
-                    localField: "assigned_rols.id_rol",
-                    foreignField: "id",
-                    as: "assigned_rols.rol"
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    first_name: 1,
-                    last_name: 1,
-                    email: 1,
-                    createdAt: 1,
-                    updatedAt: 1,
-                    assigned_rols: {
-                        id: 1,
-                        rol: { description: 1 }
+        try {
+            const resultado = await UserModel.aggregate([
+                { $match: { id: parseInt(idU) } }, // Utilizamos parseInt para asegurarnos de que idU sea un número
+                {
+                    $lookup: {
+                        from: "assignedRols",
+                        localField: "id",
+                        foreignField: "id_user",
+                        as: "assigned_rols"
+                    }
+                },
+                {
+                    $unwind: "$assigned_rols"
+                },
+                {
+                    $lookup: {
+                        from: "rols",
+                        localField: "assigned_rols.id_rol",
+                        foreignField: "id",
+                        as: "rol"
+                    }
+                },
+                {
+                    $unwind: "$rol"
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        first_name: { $first: "$first_name" },
+                        last_name: { $first: "$last_name" },
+                        email: { $first: "$email" },
+                        createdAt: { $first: "$createdAt" },
+                        updatedAt: { $first: "$updatedAt" },
+                        assigned_rols: {
+                            $push: {
+                                id: "$rol.id",
+                                description: "$rol.description"
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        first_name: 1,
+                        last_name: 1,
+                        email: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        assigned_rols: 1
                     }
                 }
-            }
-        ]);
-
-        return resultado;
-    } catch (err) {
-        console.log(err)
-        
-    }
+            ]);
+    
+            return resultado;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
 }
 getTaskUserId = async (idU) => {
     try {
@@ -377,11 +404,12 @@ getTaskAllUser = async () => {
 
             ],
         });
-        this.desconectar();
+  
         return resultado;
     } catch (err) {
         console.log(err)
-        this.desconectar()
+
+        
     }
 }
 ranking=async()=>{

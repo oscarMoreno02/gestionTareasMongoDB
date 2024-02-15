@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const rolSchema = new mongoose.Schema({
     id: { type: Number},
     description: { type: String }
-}, { collection: 'usuarios' , versionKey: false });
+}, { collection: 'rols' , versionKey: false });
 
 const RolModel = mongoose.model('Rol', rolSchema);
 

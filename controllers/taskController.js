@@ -3,11 +3,11 @@ const {
     response,
     request
 } = require('express');
-const Conexion = require('../database/ConexionMongo')
+const {ConexionMongo} = require('../database/ConexionMongo');
 const bcrypt = require('bcrypt');
 
 const allTask = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.getAllTask()
         .then(data => {
 
@@ -24,7 +24,7 @@ const allTask = (req, res = response) => {
         })
 }
 const getTaskDone = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.getTaskByStatus(true)
         .then(data => {
 
@@ -41,7 +41,7 @@ const getTaskDone = (req, res = response) => {
         })
 }
 const getTaskUndone = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.getTaskByStatus(false)
         .then(data => {
 
@@ -58,7 +58,7 @@ const getTaskUndone = (req, res = response) => {
         })
 }
 const allAvailableTask = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.getAllAvailableTask()
         .then(data => {
 
@@ -76,7 +76,7 @@ const allAvailableTask = (req, res = response) => {
 }
 
 const uniqueTask = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     console.log(req.params.id)
     conexion.getTask(req.params.id)
         .then(data => {
@@ -96,7 +96,7 @@ const uniqueTask = (req, res = response) => {
 }
 
 const editTaskStatus = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.updateTaskStatus(req.params.id)
         .then(data => {
             res.status(202).json('Actualizado correctamente')
@@ -108,7 +108,7 @@ const editTaskStatus = (req, res = response) => {
 }
 
 const fullUpdate= (req, res = response)=>{
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.updateFullTask(req.params.id,req.body)
     .then(data => {
         console.log(data)
@@ -121,7 +121,7 @@ const fullUpdate= (req, res = response)=>{
 
 }
 const editTaskProgress = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     let progress = req.body.progress
     if (progress) {
 
@@ -139,7 +139,7 @@ const editTaskProgress = (req, res = response) => {
 }
 
 const addTaskTime = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     let time = req.body.time
     if (time) {
 
@@ -156,7 +156,7 @@ const addTaskTime = (req, res = response) => {
     }
 }
 const editTaskAssignment = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     let assignment = req.body.assignment
     if (assignment) {
 
@@ -173,7 +173,7 @@ const editTaskAssignment = (req, res = response) => {
     }
 }
 const dropTaskAssignment = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
 
     conexion.updateTaskAssignment(req.params.id, null)
         .then(data => {
@@ -186,7 +186,7 @@ const dropTaskAssignment = (req, res = response) => {
 
 }
 const insertTask = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.insertTask(req.body)
         .then(data => {
 
@@ -201,7 +201,7 @@ const insertTask = (req, res = response) => {
 }
 
 const removeTask = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.deleteTask(req.params.id)
         .then(msg => {
 
@@ -217,7 +217,7 @@ const removeTask = (req, res = response) => {
         })
 }
 const getTaskOfUser = (req, res = response) => {
-    const conx = new Conexion();
+    const conx = new ConexionMongo();
 
     conx.getTaskUserId(req.params.id)
         .then(msg => {
@@ -232,7 +232,7 @@ const getTaskOfUser = (req, res = response) => {
         });
 }
 const getTaskOfAllUser = (req, res = response) => {
-    const conx = new Conexion();
+    const conx = new ConexionMongo();
 
     conx.getTaskAllUser()
         .then(msg => {
@@ -247,7 +247,7 @@ const getTaskOfAllUser = (req, res = response) => {
         });
 }
 const evaluateUsers = (req, res = response) => {
-    const conexion = new Conexion()
+    const conexion = new ConexionMongo()
     conexion.getTaskByStatus(false)
         .then(taskListUndone => {
             conexion.getTaskByStatus(true)

@@ -3,7 +3,7 @@ const {response,request} = require('express');
 const {ConexionMongo} = require('../database/ConexionMongo')
 const bcrypt = require('bcrypt');
 const allUser=(req ,res = response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.getAllUser()
     .then(msg =>{
         console.log('Listado encontrado')
@@ -16,7 +16,7 @@ const allUser=(req ,res = response)=>{
 }
 
 const uniqueUser=(req,res = response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.getUser(req.params.id)
     .then(msg=>{
         console.log('Persona encontrada')
@@ -31,7 +31,7 @@ const uniqueUser=(req,res = response)=>{
 }
 
 const editUserPassword=(req,res= response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.updateUserPassword(req.params.id,req.body.password)
     .then(msg=>{
         console.log('Actualizaddo correctamente')
@@ -57,7 +57,7 @@ const insertUser=(req,res = response)=>{
 }
 
 const removeUser=(req,res= response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.deleteUser(req.params.id)
     .then(msg=>{
         console.log('Exito en la eliminacion')
@@ -70,7 +70,7 @@ const removeUser=(req,res= response)=>{
 }
 const removeRolToUser=(req,res= response)=>{
     console.log('llega')
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.deleteAssignedRol(req.body)
     .then(msg=>{
         console.log('Exito en la eliminacion')
@@ -83,7 +83,7 @@ const removeRolToUser=(req,res= response)=>{
     })
 }
 const addRolToUser=(req,res = response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.insertAssignedRol(req.body)
     .then(msg=>{
         console.log('Rol asignado correctamente')
@@ -95,7 +95,7 @@ const addRolToUser=(req,res = response)=>{
     })
 }
 const ranking=(req ,res = response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.ranking()
     .then(msg =>{
         console.log(msg)
@@ -107,7 +107,7 @@ const ranking=(req ,res = response)=>{
     })
 }
 const updatePassword=(req,res= response)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     conexion.updateUserPassword(req.uid,req.body.password)
     .then(msg=>{
         console.log('Actualizaddo correctamente')
