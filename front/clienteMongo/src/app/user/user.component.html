@@ -1,0 +1,76 @@
+<p-dropdown  [options]="lista" [(ngModel)]="url" optionLabel="nombre" [showClear]="true" placeholder="Selecciona una accion"></p-dropdown>
+@if(url){
+
+    @if(url.requireId==true){
+        <br>
+        <label>Escribe el id</label> <br>
+        <input type="number" [(ngModel)]="genericID">
+        <br>
+    }
+    @if(url.verbo=='post'){
+        @switch (url.tabla) {
+
+        @case ('user') {
+         <br>   nombre <input type="text" [(ngModel)]="userForm.first_name">
+        <br>  apellido <input type="text" [(ngModel)]="userForm.last_name">
+        <br>  email <input type="text" [(ngModel)]="userForm.email">
+        <br>  password<input type="text" [(ngModel)]="userForm.password">
+        }
+        @default {}
+        }
+    }
+    @if(url.verbo=='get'){
+        @switch (url.tabla) {
+        @case ('user') {
+            @if(url.requireId){
+                <br>   id :<span>{{userView.id}}</span> 
+                <br>   nombre :<span>{{userView.first_name}}</span> 
+                <br>  apellido : <span>{{userView.last_name}}</span>
+                <br>  email : <span>{{userView.email}}</span>
+                <br>  password : <span>{{userView.password}}</span>
+            }@else {
+                <table>
+                    <thead>
+                        <th>id</th>
+                        <th>nombre</th>
+                        <th>apellido</th>
+                        <th>email</th>
+                        <th>password</th>
+                        <th>rol</th>
+                    </thead>
+                    <tbody>
+                        @for (user of userList; track user.id) {
+                            <tr>
+                                <td>{{user.id}}</td>
+                                <td>{{user.first_name}}</td>
+                                <td>{{user.last_name}}</td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.password}}</td>
+                                @if(user.assigned_rols){
+                                    <td>
+                                        <p-dropdown  [options]="user.assigned_rols" [(ngModel)]="rolUserSelect" optionLabel="description" [showClear]="true" placeholder="Roles"></p-dropdown>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+            }
+        }
+        @default {}
+        }
+    }
+    @if(url.verbo=='put'){
+        @switch (url.tabla) {
+        @case ('user') {
+            <br>  password<input type="text" [(ngModel)]="userForm.password">
+        }
+        @default {}
+        }
+    }
+
+
+    <br>
+    <button (click)="enviarPeticion()">Enviar enviarPeticion</button>
+}
