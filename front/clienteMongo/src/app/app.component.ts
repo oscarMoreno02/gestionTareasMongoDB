@@ -13,6 +13,6 @@ import { ContenidoComponent } from './contenido/contenido.component';
 })
 export class AppComponent {
   title = 'clienteMongo';
-  logueado=false
+  logueado:any={value:false}
 
 }

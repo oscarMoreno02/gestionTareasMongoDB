@@ -1,5 +1,5 @@
-@if(logueado==true){
-  <app-login></app-login>
+@if(logueado.value==false){
+  <app-login [isLogged]="logueado"></app-login>
 }@else {
 <app-contenido></app-contenido>
   
