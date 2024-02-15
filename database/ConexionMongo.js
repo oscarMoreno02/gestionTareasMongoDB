@@ -10,17 +10,23 @@ class ConexionMongo{
     
     insertUser = async (req, res) => {
     try {
+        let body=req
         try{
+            console.log('llega1')
             let ultimo= await UserModel.find().sort({id:-1})
-            req.body.id=parseInt(ultimo[0].id+1)
+            console.log(ultimo)
+            body.id=parseInt(ultimo[0].id+1)
         }
         catch(e){
-            req.body.id=1
+
+            console.log('llega12')
+            console.log(e)
+            body.id=1
         }
-        req.body.password= await bcrypt.hash(req.body.password, 10);
-        await UserModel.create(req.body);
+        body.password= await bcrypt.hash(body.password, 10);
+        await UserModel.create(body);
     
-        return req.body.id
+        return body.id
     } catch (error) {
         console.error('Error al registrar usuario:', error);
         res.status(500).json({ 'msg': 'Error al registrar usuario' });
@@ -37,7 +43,7 @@ checkLogin = async (e) => {
 }
 getAllUser = async () => {
    
-    const resultado = await UserModel.findAll();
+    const resultado = await UserModel.find();
 
     return resultado;
 }
@@ -379,30 +385,51 @@ getTaskUserId = async (idU) => {
 
 getRolAllUser = async (idU) => {
     try {
+        const resultado = await UserModel.aggregate([
+            {
+                $lookup: {
+                    from: "assignedRols",
+                    localField: "id",
+                    foreignField: "id_user",
+                    as: "assigned_rols"
+                }
+            },
+            {
+                $lookup: {
+                    from: "rols",
+                    localField: "assigned_rols.id_rol",
+                    foreignField: "id",
+                    as: "rols"
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    first_name: 1,
+                    last_name: 1,
+                    email: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    assigned_rols: {
+                        $map: {
+                            input: "$assigned_rols",
+                            as: "assigned_rol",
+                            in: {
+                                id: "$$assigned_rol.id_rol",
+                                description: { $arrayElemAt: ["$rols.description", { $indexOfArray: ["$rols.id", "$$assigned_rol.id_rol"] }] }
+                            }
+                        }
+                    }
+                }
+            }
+        ]);
 
-        let resultado = [];
-        this.conectar();
-        resultado = await models.User.findAll({
-            attributes: ['first_name','last_name','email','createdAt','updatedAt'],
-            include: [{
-                model: models.AssignedRol,
-                as: 'assigned_rols',
-                include: [{
-                        model: models.Rol,
-                        as: 'rol',
-                        attributes: ['description'],
-                    },
-
-                ],
-                attributes: ['id'],
-            }, ],
-        });
-        this.desconectar();
         return resultado;
     } catch (err) {
-        console.log(err)
-        this.desconectar()
+        console.log(err);
+        throw err;
     }
+
 }
 getTaskAllUser = async () => {
     try {

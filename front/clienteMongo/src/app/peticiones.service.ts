@@ -18,8 +18,12 @@ export class PeticionesService {
     peticionPut(url:string,body:any,id:number): Observable<any | undefined> {
       return this.http.put<any>(url+'/'+id,body,{params:{auth:true}})
     }
-    peticionGet(url:string,id:number): Observable<any | undefined> {
-      return this.http.get<any>(url+'/'+id,{params:{auth:true}})
+    peticionGet(url:string,id:number |null): Observable<any | undefined> {
+      if(id==null){
+        return this.http.get<any>(url,{params:{auth:true}})
+      }else{
+        return this.http.get<any>(url+'/'+id,{params:{auth:true}})
+      }
     }
     peticionDelete(url:string,id:number): Observable<any | undefined> {
       return this.http.delete<any>(url+'/'+id,{params:{auth:true}})

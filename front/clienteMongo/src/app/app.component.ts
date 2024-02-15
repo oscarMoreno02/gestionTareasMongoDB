@@ -14,5 +14,5 @@ import { ContenidoComponent } from './contenido/contenido.component';
 export class AppComponent {
   title = 'clienteMongo';
   logueado:any={value:false}
-
+  
 }
