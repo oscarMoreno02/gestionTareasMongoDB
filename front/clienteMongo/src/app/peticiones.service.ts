@@ -8,9 +8,20 @@ import { Observable, ObservableInput } from 'rxjs';
 export class PeticionesService {
 
   constructor(private http:HttpClient) { }
-  login(email:string,password:string): Observable<any | undefined> {
-   let body={email:email,password:password}
+  login(body:any): Observable<any | undefined> {
+ 
     return this.http.put<any>('http://localhost:9090/api/login',body)
   }
-
+  peticionPost(url:string,body:any): Observable<any | undefined> {
+      return this.http.post<any>(url,body)
+    }
+    peticionPut(url:string,body:any,id:number): Observable<any | undefined> {
+      return this.http.put<any>(url+'/'+id,body,{params:{auth:true}})
+    }
+    peticionGet(url:string,id:number): Observable<any | undefined> {
+      return this.http.get<any>(url+'/'+id,{params:{auth:true}})
+    }
+    peticionDelete(url:string,id:number): Observable<any | undefined> {
+      return this.http.delete<any>(url+'/'+id,{params:{auth:true}})
+    }
 }

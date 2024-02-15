@@ -15,7 +15,7 @@ export class LoginComponent {
   logueado:EventEmitter<boolean>=new EventEmitter
   @Input() isLogged?:any
   login(){
-    this.servicio.login(this.email,this.password).subscribe({
+    this.servicio.login({email:this.email,password:this.password}).subscribe({
       next:(data)=>{
         sessionStorage.setItem('token',data.token)
         this.isLogged.value=true
