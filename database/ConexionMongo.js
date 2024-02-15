@@ -112,6 +112,13 @@ getTask = async (id) => {
 insertTask = async (body) => {
     let resultado = 0;
     try {
+        try{
+            let ultimo= await TaskModel.find().sort({id:-1})
+            body.id=parseInt(ultimo[0].id+1)
+        }
+        catch(e){
+            body.id=1
+        }
         await TaskModel.create(body)
         resultado = 1;
     } catch (error) {
@@ -207,6 +214,13 @@ getRol = async (id) => {
 insertAssignedRol = async (body) => {
     let resultado = 0;
     try {
+        try{
+            let ultimo= await AssignedRolModel.find().sort({id:-1})
+            body.id=parseInt(ultimo[0].id+1)
+        }
+        catch(e){
+            body.id=1
+        }
         await AssignedRolModel.create(body);
         resultado = 1;
     } catch (error) {
@@ -277,7 +291,7 @@ deleteRol = async (id) => {
 getRolUserId = async (idU) => {
         try {
             const resultado = await UserModel.aggregate([
-                { $match: { id: parseInt(idU) } }, // Utilizamos parseInt para asegurarnos de que idU sea un número
+                { $match: { id: parseInt(idU) } },
                 {
                     $lookup: {
                         from: "assignedRols",
