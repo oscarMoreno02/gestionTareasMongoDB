@@ -13,11 +13,11 @@ const validarJWT = (req , res , next) => {
         const {uid, abilities} = jwt.verify(token, process.env.TOKENKEYWORD);
         req.uid = uid;
         req.abilities=abilities
-        console.log(uid);
-        console.log(token);
+        console.log('llega')
         next();
         
     }catch(error){
+        console.log('llega error')
         console.log(error);
         res.status(400).json({'msg':'Token no válido.'});
     }

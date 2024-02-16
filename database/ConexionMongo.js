@@ -205,7 +205,7 @@ getAllRol = async () => {
     let resultado = [];
 
     resultado = await RolModel.find();
-    this.desconectar();
+    console.log(resultado)
     return resultado;
 }
 getRol = async (id) => {
@@ -288,10 +288,7 @@ insertRol = async (body) => {
 }
 deleteRol = async (id) => {
     let resultado = [];
-    this.conectar();
     let rol = await  RolModel.findOneAndDelete({ id: id });
-  
-    this.desconectar();
     return resultado;
 }
 getRolUserId = async (idU) => {

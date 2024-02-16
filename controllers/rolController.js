@@ -61,12 +61,13 @@ const newRol=(req,res = response)=>{
 
 const removeRol=(req,res= response)=>{
     const conexion= new ConexionMongo()
-    conexion.deleteRol(req.body)
+    conexion.deleteRol(req.params.id)
     .then(msg=>{
         console.log('Exito en la eliminacion')
         res.status(202).json(msg)
     })
     .catch(err=>{
+     console.log(err)
         console.log('Error en la eliminacion')
         res.status(203).json(err)
     })

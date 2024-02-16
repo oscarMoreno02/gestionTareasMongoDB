@@ -8,11 +8,12 @@ import { Rol, User } from '../user';
 import { Tablas } from '../tablas';
 import { UserComponent } from '../user/user.component';
 import { TasksComponent } from '../tasks/tasks.component';
+import { RolComponent } from '../rol/rol.component';
 
 @Component({
   selector: 'app-contenido',
   standalone: true,
-  imports: [DropdownModule,FormsModule,UserComponent,TasksComponent],
+  imports: [DropdownModule,FormsModule,UserComponent,TasksComponent,RolComponent],
   templateUrl: './contenido.component.html',
   styleUrl: './contenido.component.css'
 })
@@ -21,7 +22,8 @@ constructor(private service:PeticionesService) {
 }
   lista: Array<Tablas> = [
   {nombre:'user'},
-  {nombre:'tasks'}
+  {nombre:'tasks'},
+  {nombre:'rol'}
 ]
   tabla?:Tablas
 

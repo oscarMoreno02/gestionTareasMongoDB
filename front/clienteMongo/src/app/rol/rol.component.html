@@ -1,1 +1,61 @@
-<p>rol works!</p>
+<p-dropdown  [options]="lista" [(ngModel)]="url" optionLabel="nombre" [showClear]="true" placeholder="Selecciona una accion"></p-dropdown>
+@if(url){
+
+    @if(url.requireId==true){
+        <br>
+        <label>Escribe el id</label> <br>
+        <input type="number" [(ngModel)]="genericID">
+        <br>
+    }
+    @if(url.verbo=='post'){
+        @switch (url.tabla) {
+        @case ('rol') {
+         <br>   description <input type="text" [(ngModel)]="userForm.description">
+        }
+        @default {}
+        }
+    }
+    @if(url.verbo=='get'){
+        @switch (url.tabla) {
+
+        @case ('rol') {
+            @if(url.requireId){
+                <br>   id :<span>{{userView.id}}</span> 
+                <br>   description :<span>{{userView.description}}</span> 
+            }@else {
+                <table>
+                    <thead>
+                        <th>id</th>
+                        <th>description</th>
+                    </thead>
+                    <tbody>
+                        @for (rol of userList; track rol.id) {
+                            <tr>
+                                <td>{{rol.id}}</td>
+            
+                                <td>{{rol.description}}</td>
+                                <!-- @if(user.assigned_rols){
+                                    <td>
+                                        <p-dropdown  [options]="user.assigned_rols" [(ngModel)]="rolUserSelect" optionLabel="description" [showClear]="true" placeholder="Roles"></p-dropdown>
+                                    </td>
+                                } -->
+                            </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+            }
+        }
+        @default {}
+        }
+    }
+    @if(url.verbo=='put'){
+        Introduce la descripción
+        <br>
+        <input type="text" [(ngModel)]="userForm.description">
+    }
+
+
+    <br>
+    <button (click)="enviarPeticion()">Enviar Peticion</button>
+}
