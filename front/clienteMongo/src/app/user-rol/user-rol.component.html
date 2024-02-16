@@ -1,1 +1,17 @@
-<p>user-rol works!</p>
+<p-dropdown  [options]="lista" [(ngModel)]="url" optionLabel="nombre" [showClear]="true" placeholder="Selecciona una accion"></p-dropdown>
+@if(url){
+
+    @if(url.requireId==true){
+        <br>
+        <label>Escribe el id del rol</label> <br>
+        <input type="number" [(ngModel)]="userForm.id_rol">
+        <br>
+        <br>
+        <label>Escribe el id del usuario</label> <br>
+        <input type="number" [(ngModel)]="userForm.id_user">
+        <br>
+    }
+
+    <br>
+    <button (click)="enviarPeticion()">Enviar Peticion</button>
+}

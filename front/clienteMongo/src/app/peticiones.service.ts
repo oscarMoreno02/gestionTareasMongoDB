@@ -25,7 +25,12 @@ export class PeticionesService {
         return this.http.get<any>(url+'/'+id,{params:{auth:true}})
       }
     }
-    peticionDelete(url:string,id:number): Observable<any | undefined> {
-      return this.http.delete<any>(url+'/'+id,{params:{auth:true}})
+    peticionDelete(url:string,id:number | null,body?:any): Observable<any | undefined> {
+      if(id==null){
+        return this.http.delete<any>(url,body)
+      }else{
+        return this.http.delete<any>(url+'/'+id,{params:{auth:true}})
+      }
+      
     }
 }

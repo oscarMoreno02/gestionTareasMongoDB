@@ -23,12 +23,13 @@ class ConexionMongo{
             console.log(e)
             body.id=1
         }
-        body.password= await bcrypt.hash(body.password, 10);
+   
+       body.password= await bcrypt.hash(body.password, 10);
         await UserModel.create(body);
     
         return body.id
     } catch (error) {
-        console.error('Error al registrar usuario:', error);
+        console.error( error);
         res.status(500).json({ 'msg': 'Error al registrar usuario' });
     }
 }
@@ -238,7 +239,9 @@ insertAssignedRol = async (body) => {
 deleteAssignedRol = async (body) => {
     let resultado = 0
     try {
-        const rol = await AssignedRolModel.findOneAndDelete({id_user: body.id_user, id_rol: body.id_rol});
+        console.log(body)
+        const rol = await AssignedRolModel.deleteOne({ id_user: parseInt(body.id_user), id_rol: parseInt(body.id_rol) });
+        
         resultado = 1;
     } catch (error) {
         console.log('Ocurrió un error desconocido: ', error);
@@ -303,9 +306,7 @@ getRolUserId = async (idU) => {
                         as: "assigned_rols"
                     }
                 },
-                {
-                    $unwind: "$assigned_rols"
-                },
+             
                 {
                     $lookup: {
                         from: "rols",
@@ -320,6 +321,7 @@ getRolUserId = async (idU) => {
                 {
                     $group: {
                         _id: "$_id",
+                        id: { $first: "$id" },
                         first_name: { $first: "$first_name" },
                         last_name: { $first: "$last_name" },
                         email: { $first: "$email" },
@@ -336,6 +338,7 @@ getRolUserId = async (idU) => {
                 {
                     $project: {
                         _id: 0,
+                        id:1,
                         first_name: 1,
                         last_name: 1,
                         email: 1,
@@ -402,6 +405,7 @@ getRolAllUser = async (idU) => {
             {
                 $project: {
                     _id: 0,
+                    id:1,
                     first_name: 1,
                     last_name: 1,
                     email: 1,

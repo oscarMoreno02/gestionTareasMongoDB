@@ -17,6 +17,7 @@ const login =  (req, res = response) => {
                             let r=[]
                             console.log(roles)
                             for(let i=0;i<roles[0].assigned_rols.length;i++){
+                                console.log(roles)
                                 r.push(roles[0].assigned_rols[i].description)
                             }
        
@@ -45,7 +46,7 @@ const login =  (req, res = response) => {
 const register =  (req, res = response) => {
     try{
         const conx = new ConexionMongo();
-            conx.insertUser(req)    
+            conx.insertUser(req.body)    
             .then( usu => {
                
                 let data={
