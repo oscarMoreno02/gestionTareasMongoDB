@@ -184,7 +184,8 @@ updateTaskTime = async (id, time) => {
     let resultado = 0
     try {
         let task = await TaskModel.findOne({ id: id });;
-        task.time_dedicated += time
+            task.time_dedicated=time
+        
         await task.save()
     } catch (error) {
         throw error
@@ -357,29 +358,34 @@ getRolUserId = async (idU) => {
 }
 getTaskUserId = async (idU) => {
     try {
-
-        let resultado = [];
-        this.conectar();
-    
-        resultado = await models.User.findAll({
-            attributes: ['first_name','last_name','email','createdAt','updatedAt'],
-            where: {
-                id: {
-                    [Op.eq]: idU
+        const resultado = await UserModel.aggregate([
+            {
+                $match: { id: parseInt(idU) } 
+            },
+            {
+                $lookup: {
+                    from: "tasks",
+                    localField: "id",
+                    foreignField: "assignment",
+                    as: "assigned_tasks"
                 }
             },
-            include: [{
-                    model: models.Task,
-                    as: 'tasks',
-                },
+            {
+                $project: {
+                    _id: 0,
+                    id: 1,
+                    first_name: 1,
+                    last_name: 1,
+                    email: 1,
+                    assigned_tasks: 1
+                }
+            }
+        ]);
 
-            ],
-        });
-        this.desconectar();
         return resultado;
     } catch (err) {
-        console.log(err)
-        this.desconectar()
+        console.log(err);
+        throw err;
     }
 }
 
@@ -434,24 +440,31 @@ getRolAllUser = async (idU) => {
 }
 getTaskAllUser = async () => {
     try {
+        const resultado = await UserModel.aggregate([
+            {
+                $lookup: {
+                    from: "tasks",
+                    localField: "id",
+                    foreignField: "assignment",
+                    as: "assigned_tasks"
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    id: 1,
+                    first_name: 1,
+                    last_name: 1,
+                    email: 1,
+                    assigned_tasks: 1
+                }
+            }
+        ]);
 
-        let resultado = [];
-        this.conectar();
-        resultado = await models.User.findAll({
-            attributes: ['first_name','last_name','email','createdAt','updatedAt'],
-            include: [{
-                    model: models.Task,
-                    as: 'tasks',
-                },
-
-            ],
-        });
-  
         return resultado;
     } catch (err) {
-        console.log(err)
-
-        
+        console.log(err);
+        throw err;
     }
 }
 ranking=async()=>{

@@ -4,7 +4,8 @@ export interface User {
     password:string,
     first_name:string,
     last_name:string,
-    assigned_rols?:Array<Rol>
+    assigned_rols?:Array<Rol>,
+    assigned_tasks?:Array<Task>
 }
 export interface Rol {
     id:number,

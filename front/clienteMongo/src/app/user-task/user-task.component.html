@@ -1,0 +1,90 @@
+
+<p-dropdown  [options]="lista" [(ngModel)]="url" optionLabel="nombre" [showClear]="true" placeholder="Selecciona una accion"></p-dropdown>
+<h3>Solo los usuarios que tengan asignadas las tareas pueden hacer modificaciones</h3>
+<h5>El id del usuario para hacer la validación de la asignación se coge del payload del token por lo que solo el usuario logueado puede hacer modificaciones sobre las tareas que tiene asignadas</h5> <br>
+@if(url){
+    @if(url.requireId==true){
+        <br>
+        <label>Escribe el id</label> <br>
+        <input type="number" [(ngModel)]="genericID">
+        <br>
+    }
+    @if(url.verbo=='get'){
+        @switch (url.tabla) {
+
+        @case ('task') {
+            @if(url.requireId){
+                <br>   id :<span>{{userView.id}}</span> 
+                <br>   nombre :<span>{{userView.first_name}}</span> 
+                <br>  apellido : <span>{{userView.last_name}}</span>
+                <br>  email : <span>{{userView.email}}</span>
+                <br>  password : <span>{{userView.password}}</span>
+                <br> tareas :     
+                @if(userView.assigned_tasks){
+                    <td>
+                        <p-dropdown  [options]="userView.assigned_tasks" [(ngModel)]="taskUserSelected" optionLabel="description" [showClear]="true" placeholder="Tareas"></p-dropdown>
+                    </td>
+            }@else {
+                <td>Sin tareas asignadas</td>
+                }
+            }@else {
+                <table>
+                    <thead>
+                        <th>id</th>
+                        <th>nombre</th>
+                        <th>apellido</th>
+                        <th>email</th>
+                        <th>password</th>
+                        <th>tareas</th>
+                    </thead>
+                    <tbody>
+                        @for (user of userList; track user.id) {
+                            <tr>
+
+                                <td>{{user.id}}</td>
+                                <td>{{user.first_name}}</td>
+                                <td>{{user.last_name}}</td>
+                                <td>{{user.email}}</td>
+                                <td>{{user.password}}</td>
+                                @if(user.assigned_tasks){
+                                    <td>
+                                        <p-dropdown  [options]="user.assigned_tasks" [(ngModel)]="taskUserSelected" optionLabel="description" [showClear]="true" placeholder="tareas"></p-dropdown>
+                                    </td>
+                                }@else {
+                                    <td>Sin tareas asignadas</td>
+                                }
+                            </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+            }
+        }
+        @default {}
+        }
+    }
+    @if(url.verbo=='put'){
+        
+        @if(url.change){
+            @switch (url.change) {
+                @case ('progress') {
+                   <br>
+                   Introduce el progreso 
+                   <br>
+                   <input type="number" [(ngModel)]="userForm.progress">
+                }
+                @case ('time_dedicated') {
+                    <br>
+                    Introduce el tiempo dedicado
+                    <br>
+                    <input type="number" [(ngModel)]="userForm.time_dedicated">
+                 }
+                @default {}
+            }
+        }   
+    }
+
+
+    <br>
+    <button (click)="enviarPeticion()">Enviar enviarPeticion</button>
+}
