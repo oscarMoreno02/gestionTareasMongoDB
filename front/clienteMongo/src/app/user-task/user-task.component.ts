@@ -4,7 +4,7 @@ import { Subscription, identity } from 'rxjs';
 import { UrlD } from '../url';
 import { FormsModule } from '@angular/forms';
 import { PeticionesService } from '../peticiones.service';
-import { Rol, Task, User } from '../user';
+import { Ranking, Rol, Task, User } from '../user';
 @Component({
   selector: 'app-user-task',
   standalone: true,
@@ -19,11 +19,13 @@ export class UserTaskComponent {
   userForm={id:"",description:'',difficulty:'',time_estimated:"",assignment:null,time_dedicated:null,done:false,progress:0}
   userView={id:'',email:'',password:'',first_name:'',last_name:'',assigned_tasks:[]}
   userList:Array<User>=[{id:0,email:'',password:'',first_name:'',last_name:''}]
+  ranking?:Ranking
     subscripcion: Subscription = new Subscription;
     lista: Array<UrlD> = [
   
     {nombre:'getTaskAllUser',url:'http://localhost:9090/api/user/task/',verbo:'get',requireId:null,tabla:'task'},
     {nombre:'getTaskUserID',url:'http://localhost:9090/api/user/task',verbo:'get',requireId:true,tabla:'task'},
+    {nombre:'ranking',url:'http://localhost:9090/api/user/task/ranking',verbo:'get',requireId:null,tabla:'task'},
     {nombre:'updateTaskStatusByUser',url:'http://localhost:9090/api/user/task/status',verbo:'put',requireId:true,tabla:'task',change:'status'},
     {nombre:'updateTaskProgressByUser',url:'http://localhost:9090/api/user/task/progress',verbo:'put',requireId:true,tabla:'task',change:'progress'},
      {nombre:'updateTimeDedicatedByUser',url:'http://localhost:9090/api/user/task/time',verbo:'put',requireId:true,tabla:'task',change:'time_dedicated'},
@@ -35,7 +37,20 @@ export class UserTaskComponent {
    enviarPeticion(){
     switch (this.url?.verbo){
       case ('get'):{
+        
         if(this.url.requireId==null){
+          if(this.url.nombre=='ranking'){
+            this.service.peticionGet(this.url.url,null).subscribe({
+              next:(data)=>{
+                alert('exito ')
+                this.ranking=data
+                  console.log(this.ranking)
+              },
+              error:(err)=>{
+                console.log(err)
+              }
+            })
+          }
           this.service.peticionGet(this.url.url,null).subscribe({
             next:(data)=>{
               alert('exito ')

@@ -21,3 +21,14 @@ export interface Task {
     done?:boolean ,
     progress?:number
 }
+
+export interface UserRanking {
+    id:number,
+    email:string,
+    first_name:string,
+    last_name:string,
+    tasks_completed:number
+}
+export interface Ranking {
+   ranking:Array<UserRanking>
+}

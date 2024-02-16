@@ -468,21 +468,50 @@ getTaskAllUser = async () => {
     }
 }
 ranking=async()=>{
-let resultado = [];
-try{
+    try {
+        const resultado = await UserModel.aggregate([
+            {
+                $lookup: {
+                    from: "tasks",
+                    localField: "id",
+                    foreignField: "assignment",
+                    as: "assigned_tasks"
+                }
+            },
+            {
+                $unwind: "$assigned_tasks"
+            },
+            {
+                $match: { "assigned_tasks.done": true }
+            },
+            {
+                $group: {
+                    _id: { id: "$id", first_name: "$first_name" },
+                    last_name: { $first: "$last_name" },
+                    email: { $first: "$email" },
+                    tasks_completed: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    id: "$_id.id",
+                    first_name: "$_id.first_name",
+                    last_name: 1,
+                    email: 1,
+                    tasks_completed: 1
+                }
+            },
+            {
+                $sort: { tasks_completed: -1 }
+            }
+        ]);
 
-    this.conectar();
-    
-    resultado = await this.db.query
-    ('SELECT u.id, u.first_name,u.last_name,u.email, COUNT(t.id) AS tasks_completed '
-    +' FROM users u JOIN tasks t ON u.id = t.assignment '
-    +' WHERE t.done = 1 GROUP BY u.id, u.first_name ORDER BY tasks_completed DESC; ');
-    this.desconectar();
-    return resultado;
-}catch(e){
-    console.log(e)
-    return e
-}
+        return resultado;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
 }
 }
 module.exports = {
