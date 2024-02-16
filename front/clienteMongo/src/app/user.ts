@@ -16,5 +16,7 @@ export interface Task {
     difficulty: string,
     time_estimated: number,
     time_dedicated?:number,
-    assignment?:number
+    assignment?:number,
+    done?:boolean ,
+    progress?:number
 }

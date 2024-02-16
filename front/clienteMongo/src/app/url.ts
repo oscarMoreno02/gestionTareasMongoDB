@@ -3,5 +3,6 @@ export interface UrlD {
     url:string,
     verbo:string,
     requireId:true | null,
-    tabla:string
+    tabla:string,
+    change?:string
 }

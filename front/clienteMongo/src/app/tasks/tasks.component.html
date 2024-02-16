@@ -9,7 +9,7 @@
     }
     @if(url.verbo=='post'){
         @switch (url.tabla) {
-        @case ('user') {
+        @case ('task') {
          <br>   description <input type="text" [(ngModel)]="userForm.description">
         <br> 
         difficulty 
@@ -27,7 +27,7 @@
     @if(url.verbo=='get'){
         @switch (url.tabla) {
 
-        @case ('user') {
+        @case ('task') {
             @if(url.requireId){
                 <br>   id :<span>{{userView.id}}</span> 
                 <br>   description :<span>{{userView.description}}</span> 
@@ -35,6 +35,8 @@
                 <br>  time_estimated : <span>{{userView.time_estimated}}</span>
                 <br>  time_dedicated : <span>{{userView.time_dedicated}}</span>
                 <br>  assignment : <span>{{userView.assignment}}</span>
+                <br>  progress : <span>{{userView.progress}}</span>
+                <br>  done : <span>{{userView.done}}</span>
             }@else {
                 <table>
                     <thead>
@@ -44,7 +46,8 @@
                         <th>time_estimated</th>
                         <th>time_dedicated</th>
                         <th>assignment</th>
-                        <th></th>
+                        <th>progress</th>
+                        <th>done</th>
                     </thead>
                     <tbody>
                         @for (task of userList; track task.id) {
@@ -56,6 +59,8 @@
                                 <td>{{task.time_estimated}}</td>
                                 <td>{{task.time_dedicated}}</td>
                                 <td>{{task.assignment}}</td>
+                                <td>{{task.progress}}</td>
+                                <td>{{task.done}}</td>
                                 <!-- @if(user.assigned_rols){
                                     <td>
                                         <p-dropdown  [options]="user.assigned_rols" [(ngModel)]="rolUserSelect" optionLabel="description" [showClear]="true" placeholder="Roles"></p-dropdown>
@@ -72,12 +77,23 @@
         }
     }
     @if(url.verbo=='put'){
-        @switch (url.tabla) {
-        @case ('user') {
-            <!-- <br>  password<input type="text" [(ngModel)]="userForm.password"> -->
-        }
-        @default {}
-        }
+        @if(url.change){
+            @switch (url.change) {
+                @case ('progress') {
+                   <br>
+                   Introduce el progreso 
+                   <br>
+                   <input type="number" [(ngModel)]="userForm.progress">
+                }
+                @case ('assignment') {
+                    <br>
+                    Introduce el id del trabajador
+                    <br>
+                    <input type="number" [(ngModel)]="userForm.assignment">
+                 }
+                @default {}
+            }
+        }   
     }
 
 

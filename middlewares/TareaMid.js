@@ -1,8 +1,8 @@
 const {response,request} = require('express');
-const Conexion = require('../database/ConexionMongo')
+const {ConexionMongo} = require('../database/ConexionMongo');
 
 const isAvailable=(req,res,next)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     console.log(req.params.id)
     conexion.getTask(req.params.id)
     .then(data=>{
@@ -18,7 +18,7 @@ const isAvailable=(req,res,next)=>{
     })
 }
 const isAssigned=(req,res,next)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     console.log(req.params.id)
     conexion.getTask(req.params.id)
     .then(data=>{
@@ -34,7 +34,7 @@ const isAssigned=(req,res,next)=>{
     })
 }
 const checkAssignment=(req,res,next)=>{
-    const conexion= new Conexion()
+    const conexion= new ConexionMongo()
     console.log(req.params.id)
     conexion.getTask(req.params.id)
     .then(data=>{
