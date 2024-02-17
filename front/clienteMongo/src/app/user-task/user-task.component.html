@@ -1,7 +1,6 @@
 
 <p-dropdown  [options]="lista" [(ngModel)]="url" optionLabel="nombre" [showClear]="true" placeholder="Selecciona una accion"></p-dropdown>
-<h3>Solo los usuarios que tengan asignadas las tareas pueden hacer modificaciones</h3>
-<h5>El id del usuario para hacer la validación de la asignación se coge del payload del token por lo que solo el usuario logueado puede hacer modificaciones sobre las tareas que tiene asignadas</h5> <br>
+
 @if(url){
     @if(url.requireId==true){
         <br>
@@ -112,6 +111,8 @@
                  }
                 @default {}
             }
+            <h5>Solo los usuarios que tengan asignadas las tareas pueden hacer modificaciones</h5>
+            <h5>El id del usuario para hacer la validación de la asignación se coge del payload del token por lo que solo el usuario logueado puede hacer modificaciones sobre las tareas que tiene asignadas</h5> <br>
         }   
     }
 

@@ -101,6 +101,7 @@ getAllTask = async () => {
 }
 getTaskByStatus = async (status) => {
     const resultado = await TaskModel.find({ done: status });
+    console.log(resultado)
     return resultado;
 }
 getAllAvailableTask = async () => {
@@ -118,6 +119,9 @@ getTask = async (id) => {
 
 insertTask = async (body) => {
     let resultado = 0;
+    body.assignment=null
+    body.done=false
+    body.time_dedicated=0
     try {
         try{
             let ultimo= await TaskModel.find().sort({id:-1})
@@ -175,9 +179,8 @@ updateTaskProgress = async (id, progress) => {
 }
 updateFullTask = async (id,body) => {
     let resultado = 0
-        let task = await TaskModel.findOne({ id: id });;
-       await task.update(body)
-    
+        let task = await TaskModel.updateOne({ id: id },body);
+        console.log(task)
     return resultado
 }
 updateTaskTime = async (id, time) => {
@@ -350,7 +353,7 @@ getRolUserId = async (idU) => {
                 }
             ]);
     
-            return resultado;
+            return resultado[0];
         } catch (err) {
             console.log(err);
             throw err;

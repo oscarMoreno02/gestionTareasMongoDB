@@ -18,7 +18,7 @@ export class UserComponent {
   
   }
   userForm={email:'',password:'',first_name:'',last_name:'',}
-  userView={id:'',email:'',password:'',first_name:'',last_name:'',}
+  userView={id:'',email:'',password:'',first_name:'',last_name:'',assigned_rols:[]}
   userList:Array<User>=[{id:0,email:'',password:'',first_name:'',last_name:''}]
     subscripcion: Subscription = new Subscription;
     lista: Array<UrlD> = [
@@ -27,6 +27,7 @@ export class UserComponent {
     {nombre:'getUser',url:'http://localhost:9090/api/user',verbo:'get',requireId:true,tabla:'user'},
     {nombre:'insertUser',url:'http://localhost:9090/api/user',verbo:'post',requireId:null,tabla:'user'},
     {nombre:'getAllUserWithRol',url:'http://localhost:9090/api/user/rol',verbo:'get',requireId:null,tabla:'user'},
+    {nombre:'getUserWithRol',url:'http://localhost:9090/api/user/rol',verbo:'get',requireId:true,tabla:'user'},
     {nombre:'updatePasswordToUser',url:'http://localhost:9090/api/user/',verbo:'put',requireId:true,tabla:'user'},
     {nombre:'deleteUser',url:'http://localhost:9090/api/user/',verbo:'delete',requireId:true,tabla:'user'},
   ]

@@ -260,8 +260,14 @@ const evaluateUsers = (req, res = response) => {
                             .then(userList => {
                                 let freeUsers = userAvailables(userList, taskListUndone)
                                 let puntuations = puntuateUsers(task, taskListDone, freeUsers)
-                              
-                                res.status(200).json(puntuations)
+    
+                              let lista=[]
+                             for (const user of puntuations){
+                                 lista.push({id:user.id,first_name:user.first_name,last_name:user.last_name,email:user.email,points:user.points})
+                                 user.points = user.points; 
+                                }
+                                lista.sort((a, b) => b.points - a.points);
+                                res.status(200).json(lista);
                             })
                     }
                 })
@@ -302,17 +308,24 @@ userAvailables = (userList, taskList) => {
 }
 puntuateUsers = (taskToDo, taskDoneList, userList) => {
     let users=userList
-    for (let i=0;i<userList.length;i++){
-        users[i].dataValues.points=1
+    for (let i=0;i<users.length;i++){
+   
+        users[i].points=1
         for(let x=0;x<taskDoneList.length;x++){
             if(taskDoneList[x].assignment==users[i].id){
-                users[i].dataValues.points=users[i].dataValues.points+basePoints(taskToDo,taskDoneList[x])
+                let puntos=basePoints(taskToDo,taskDoneList[x])
+          
+            
+                users[i].points += puntos;
+ 
             }
         }
     }
+
     return users
 }
 basePoints = (taskToDo, referenceTask) => {
+
     let base=1
     let baseTable=[
         {
@@ -366,7 +379,7 @@ basePoints = (taskToDo, referenceTask) => {
         base=base/(((referenceTask.time_dedicated-referenceTask.time_estimated)/10)+1)
     }
 
-    console.log('llega')
+
     return base
 }
 module.exports = {

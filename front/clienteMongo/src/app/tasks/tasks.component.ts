@@ -16,17 +16,20 @@ export class TasksComponent {
   constructor(private service:PeticionesService) {
   
   }
-  userForm={id:"",description:'',difficulty:'',time_estimated:"",assignment:null,time_dedicated:null,done:false,progress:0}
+  userForm={id:0,description:'',difficulty:'s',time_estimated:0,assignment:0,time_dedicated:0,done:false,progress:0}
   userView={id:"",description:'',difficulty:'',time_estimated:"",assignment:"",time_dedicated:"",done:false,progress:0}
+  recomendacion=[{id:0,first_name:'',last_name:'',email:'',points:0}]
   userList:Array<Task>=[{id:0,description:'',difficulty:'',time_estimated:0,assignment:0,time_dedicated:0,done:false}]
     subscripcion: Subscription = new Subscription;
     lista: Array<UrlD> = [
   
     {nombre:'getAllTask',url:'http://localhost:9090/api/task/',verbo:'get',requireId:null,tabla:'task'},
     {nombre:'getTask',url:'http://localhost:9090/api/task',verbo:'get',requireId:true,tabla:'task'},
+    {nombre:'RECOMENDACION',url:'http://localhost:9090/api/task',verbo:'get',requireId:true,tabla:'task'},
     {nombre:'insertTask',url:'http://localhost:9090/api/task',verbo:'post',requireId:null,tabla:'task'},
     {nombre:'updateTaskStatus',url:'http://localhost:9090/api/task/status',verbo:'put',requireId:true,tabla:'task',change:'status'},
     {nombre:'updateTaskProgress',url:'http://localhost:9090/api/task/progress',verbo:'put',requireId:true,tabla:'task',change:'progress'},
+    {nombre:'updateTaskFull',url:'http://localhost:9090/api/task/full',verbo:'put',requireId:true,tabla:'task',change:'full'},
      {nombre:'addTaskAssignment',url:'http://localhost:9090/api/task/assignment/add',verbo:'put',requireId:true,tabla:'task',change:'assignment'},
      {nombre:'removeTaskAssignment',url:'http://localhost:9090/api/task/assignment/remove',verbo:'put',requireId:true,tabla:'task',change:'rm-assignment'},
     {nombre:'deleteTask',url:'http://localhost:9090/api/task',verbo:'delete',requireId:true,tabla:'task'},
@@ -52,6 +55,18 @@ export class TasksComponent {
             }
           })
         }else{
+          if(this.url.nombre=='RECOMENDACION'){
+            this.service.peticionGet(this.url?.url+'/'+this.genericID+'/recomendation',null).subscribe({
+              next:(data)=>{
+                alert('exito ')
+                this.recomendacion=data
+                  console.log(data)
+              },
+              error:(err)=>{
+                console.log(err)
+              }
+            })
+          }
               this.service.peticionGet(this.url?.url,this.genericID).subscribe({
                 next:(data)=>{
                   alert('exito ')
@@ -125,7 +140,17 @@ export class TasksComponent {
                     }
                   })
                 }
-
+                if(this.url.change=='full'){
+                  this.userForm.id=this.genericID
+                  this.service.peticionPut(this.url.url,this.userForm,this.genericID).subscribe({
+                    next:(data)=>{   
+                        alert('exito: '+data)
+                      },
+                      error:(err)=>{
+                        alert(err)
+                      }
+                    })
+                  }
       }
       break;
       case('delete'):{

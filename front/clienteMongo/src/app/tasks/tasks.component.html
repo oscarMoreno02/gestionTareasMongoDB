@@ -34,9 +34,48 @@
                 <br>  difficulty : <span>{{userView.difficulty}}</span>
                 <br>  time_estimated : <span>{{userView.time_estimated}}</span>
                 <br>  time_dedicated : <span>{{userView.time_dedicated}}</span>
-                <br>  assignment : <span>{{userView.assignment}}</span>
+                @if(userView.assignment==null){
+                    <br>  assignment : <span>sin asignar</span>
+                }@else {
+                    <br>  assignment : <span>{{userView.assignment}}</span>
+                }
                 <br>  progress : <span>{{userView.progress}}</span>
                 <br>  done : <span>{{userView.done}}</span>
+                @if(url.nombre=='RECOMENDACION'){
+                    <br><h5>Este algorítmo solo funciona si se han introducido datos en la aplicación anteriormente</h5>
+                   <h5>El id debe ser de una tarea que no este asignada y que este sin realizar</h5>
+                    <h5>Los usuarios que se recomendarán son usuarios que no cuentan con tareas asignadas</h5>
+                    <table>
+                        <thead>
+                            <th>id</th>
+                            <th>nombre</th>
+                            <th>apellido</th>
+                            <th>email</th>
+                            <th>puntuación</th>
+                        </thead>
+                        <tbody>
+                            @for (user of recomendacion; track user.id) {
+                                <tr>
+                                    <td>
+                                        {{user.id}}
+                                    </td>
+                                    <td>
+                                        {{user.first_name}}
+                                    </td>
+                                    <td>
+                                        {{user.last_name}}
+                                    </td>
+                                    <td>
+                                        {{user.email}}
+                                    </td>
+                                    <td>
+                                        {{user.points}}
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
             }@else {
                 <table>
                     <thead>
@@ -58,7 +97,12 @@
                                 <td>{{task.difficulty}}</td>
                                 <td>{{task.time_estimated}}</td>
                                 <td>{{task.time_dedicated}}</td>
-                                <td>{{task.assignment}}</td>
+                                @if(task.assignment!=null){
+                                    <td>{{task.assignment}}</td>
+                                }@else {
+                                    <td>sin asignar</td>
+                                }
+                          
                                 <td>{{task.progress}}</td>
                                 <td>{{task.done}}</td>
                                 <!-- @if(user.assigned_rols){
@@ -87,9 +131,44 @@
                 }
                 @case ('assignment') {
                     <br>
-                    Introduce el id del trabajador
+                    Introduce el id del trabajador para asignar
                     <br>
                     <input type="number" [(ngModel)]="userForm.assignment">
+                 }
+                 @case ('full') {
+                    <br>   Introduce la descripción <input type="text" [(ngModel)]="userForm.description">
+                    <br> 
+                    Introduce la dificultad
+                    <select name="" [(ngModel)]="userForm.difficulty" id="">
+                        <option [selected] value="s">s</option>
+                        <option value="m">m</option>
+                        <option value="l">l</option>
+                        <option value="xl">xl</option>
+                    </select>
+                    <br>
+                    Introduce el id del trabajador para asignar
+                    <br>
+                    <input type="number" [(ngModel)]="userForm.assignment">
+                    <br>
+                    Introduce el progreso 
+                    <br>
+                    <input type="number" [(ngModel)]="userForm.progress">
+                    <br>
+                    Introduce el tiempo estimado 
+                    <br>
+                    <input type="number" [(ngModel)]="userForm.time_estimated">
+                    <br>
+                    Introduce el tiempo tiempo dedicado 
+                    <br>
+                    <input type="number" [(ngModel)]="userForm.time_dedicated">
+                    <br>
+                    Introduce si esta finalizada 
+                    <br>
+                    <select name="" [(ngModel)]="userForm.done" id="">
+                        <option [selected] value="false">sin finalizar</option>
+                        <option value="true">finalizada</option>
+                      
+                    </select>
                  }
                 @default {}
             }

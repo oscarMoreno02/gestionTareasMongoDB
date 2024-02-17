@@ -29,6 +29,11 @@
                 <br>  apellido : <span>{{userView.last_name}}</span>
                 <br>  email : <span>{{userView.email}}</span>
                 <br>  password : <span>{{userView.password}}</span>
+                @if(userView.assigned_rols){
+                    <td>
+                        <p-dropdown  [options]="userView.assigned_rols" [(ngModel)]="rolUserSelect" optionLabel="description" [showClear]="true" placeholder="Roles"></p-dropdown>
+                    </td>
+                }
             }@else {
                 <table>
                     <thead>

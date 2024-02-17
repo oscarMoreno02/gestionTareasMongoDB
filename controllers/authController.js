@@ -16,9 +16,9 @@ const login =  (req, res = response) => {
                         .then(roles=>{
                             let r=[]
                             console.log(roles)
-                            for(let i=0;i<roles[0].assigned_rols.length;i++){
+                            for(let i=0;i<roles.assigned_rols.length;i++){
                                 console.log(roles)
-                                r.push(roles[0].assigned_rols[i].description)
+                                r.push(roles.assigned_rols[i].description)
                             }
        
                             const token = generarJWT(usu.id,r,usu.first_name)
